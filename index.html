@@ -6,13 +6,13 @@
     <title>Flora della Campania - Archivio Botanico</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f5; color: #2b3a2f; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f2f6f3; color: #2b3a2f; }
 
-        /* 1. RIQUADRO GRANDE CON TITOLO, SOTTOTITOLO E SFONDO IMMAGINE NATURA */
+        /* 1. RIQUADRO GRANDE SUPERIORE */
         .hero-banner {
             position: relative;
             width: 100%;
-            height: 320px;
+            height: 280px;
             background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1600&q=80');
             background-size: cover;
             background-position: center;
@@ -20,129 +20,133 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
 
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(18, 41, 25, 0.6); 
+            background: rgba(18, 41, 25, 0.65); 
             z-index: 1;
         }
 
-        .hero-text {
-            position: relative;
-            z-index: 2;
-            color: white;
-            padding: 0 20px;
-        }
+        .hero-text { position: relative; z-index: 2; color: white; padding: 0 20px; }
+        .hero-text h1 { font-size: 3rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .hero-text p { font-size: 1.3rem; font-style: italic; opacity: 0.9; font-weight: 300; }
 
-        .hero-text h1 {
-            font-size: 3.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-        }
+        .main-container { max-width: 1300px; margin: 0 auto; padding: 0 20px 60px 20px; }
 
-        .hero-text p {
-            font-size: 1.4rem;
-            font-style: italic;
-            opacity: 0.95;
-            font-weight: 300;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-        }
+        .section-title { text-align: center; font-size: 1.6rem; color: #1e4b2b; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
 
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px 40px 20px;
-        }
-
-        /* 2. BARRA ORIZZONTALE DELLE CATEGORIE RAUNKIÆR */
-        .biological-nav {
-            display: flex;
-            justify-content: space-between;
-            background: #2e6f40;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .nav-tab {
-            flex: 1;
-            min-width: 130px;
-            text-align: center;
-            padding: 18px 10px;
-            color: white;
-            font-weight: bold;
-            font-size: 1.05rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            user-select: none;
-            border-right: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .nav-tab:last-child { border-right: none; }
-        .nav-tab:hover { background: #235431; }
-        .nav-tab.active { background: #1a3f24; box-shadow: inset 0 -4px 0 #8cbd9b; }
-
-        /* 3. PANNELLI DI DISCESA CON LINK DI REINDIRIZZAMENTO */
-        .dropdown-panel {
-            display: none;
-            background: white;
-            border: 1px solid #d2e1d6;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-            animation: slideDown 0.3s ease-out;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Lista delle sottocategorie cliccabili */
-        .subclass-links-list {
+        /* 2. LA GRIGLIA DELLE SCHEDE FOTOGRAFICHE */
+        .grid-categories {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
         }
-        @media (min-width: 768px) { .subclass-links-list { grid-template-columns: 1fr 1fr; } }
 
-        .subclass-item-link {
+        /* La singola scheda */
+        .category-card {
+            position: relative;
+            height: 380px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(18,41,25,0.15);
+        }
+
+        /* Copertura iniziale: lascia vedere la foto ma rende il testo leggibile */
+        .card-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(10, 25, 15, 0.85) 0%, rgba(10, 25, 15, 0.2) 60%);
+            z-index: 1;
+            transition: background 0.4s ease;
+        }
+
+        /* Titolo della categoria sulla foto */
+        .card-title {
+            position: absolute;
+            bottom: 25px; left: 20px; right: 20px;
+            color: white;
+            font-size: 1.6rem;
+            font-weight: bold;
+            z-index: 2;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+            transition: all 0.3s ease;
+        }
+
+        /* 3. IL PANNELLO DELLE SOTTOCATEGORIE (Nascosto all'inizio) */
+        .card-dropdown-content {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 3;
+            padding: 25px;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #fafdfb;
-            border: 1px solid #e1e9e3;
-            padding: 15px 20px;
-            border-radius: 6px;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform: translateY(10px);
+        }
+
+        /* STATO ATTIVO: Quando si clicca, la foto passa in secondo piano e appaiono i link */
+        .category-card.active .card-overlay {
+            background: rgba(12, 31, 17, 0.92); /* La foto scurisce e va in secondo piano */
+        }
+        
+        .category-card.active .card-title {
+            opacity: 0; /* Il titolo grande sparisce per lasciare spazio */
+            transform: translateY(-10px);
+        }
+
+        .category-card.active .card-dropdown-content {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        /* I bottoni delle Sottocategorie dentro la foto */
+        .subclass-link {
+            display: block;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: white;
             text-decoration: none;
-            color: #1e4b2b;
+            padding: 12px 15px;
+            border-radius: 6px;
+            text-align: center;
             font-weight: 600;
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             transition: all 0.2s ease;
         }
 
-        .subclass-item-link:hover {
-            background: #edf4ef;
-            border-color: #2e6f40;
-            transform: translateX(3px);
+        .subclass-link:hover {
+            background: #ffffff;
+            color: #122919;
+            border-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        .subclass-item-link::after {
-            content: "➔";
-            color: #2e6f40;
-            font-size: 1rem;
-            transition: transform 0.2s;
-        }
-        .subclass-item-link:hover::after {
-            transform: translateX(4px);
+        .back-indicator {
+            text-align: center;
+            color: #8cbd9b;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -158,103 +162,131 @@
     </div>
 
     <div class="main-container">
+        
+        <h2 class="section-title">Classificazione secondo le Forme Biologiche di Raunkiær</h2>
 
-        <!-- 2. BARRA ORIZZONTALE DELLE CATEGORIE -->
-        <div class="biological-nav">
-            <div class="nav-tab" onclick="apriCategoria(this, 'panel-fanerofite')">Fanerofite</div>
-            <div class="nav-tab" onclick="apriCategoria(this, 'panel-camefite')">Camefite</div>
-            <div class="nav-tab" onclick="apriCategoria(this, 'panel-terofite')">Terofite</div>
-            <div class="nav-tab" onclick="apriCategoria(this, 'panel-geofite')">Geofite</div>
-            <div class="nav-tab" onclick="apriCategoria(this, 'panel-emicriptofite')">Emicriptofite</div>
-            <div class="nav-tab" onclick="apriCategoria(this, 'panel-idrofite')">Idrofite</div>
-            <div class="nav-tab" onclick="apriCategoria(this, 'panel-elofite')">Elofite</div>
-        </div>
+        <!-- 2. GRIGLIA FOTOGRAFICA DELLE CATEGORIE -->
+        <div class="grid-categories">
 
-        <!-- 3. STRUTTURE A DISCESA CON LE SOTTOCATEGORIE (LINK ALLE FUTURE PAGINE) -->
-
-        <!-- FANEROFITE -->
-        <div id="panel-fanerofite" class="dropdown-panel">
-            <div class="subclass-links-list">
-                <a href="f-arboree.html" class="subclass-item-link">F. arboree</a>
-                <a href="f-cespugliose.html" class="subclass-item-link">F. cespugliose</a>
-                <a href="f-striscianti.html" class="subclass-item-link">F. striscianti</a>
-                <a href="f-succulente.html" class="subclass-item-link">F. succulente</a>
-                <a href="f-epifete.html" class="subclass-item-link">F. epifete</a>
-                <a href="f-fruticose.html" class="subclass-item-link">F. fruticose</a>
+            <!-- FANEROFITE (Sfondo: Grande albero/bosco) -->
+            <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
+                <div class="card-overlay"></div>
+                <div class="card-title">🪵 Fanerofite</div>
+                <div class="card-dropdown-content">
+                    <a href="f-arboree.html" class="subclass-link">F. arboree</a>
+                    <a href="f-cespugliose.html" class="subclass-link">F. cespugliose</a>
+                    <a href="f-striscianti.html" class="subclass-link">F. striscianti</a>
+                    <a href="f-succulente.html" class="subclass-link">F. succulente</a>
+                    <a href="f-epifete.html" class="subclass-link">F. epifete</a>
+                    <a href="f-fruticose.html" class="subclass-link">F. fruticose</a>
+                    <div class="back-indicator">↩ Clicca fuori per chiudere</div>
+                </div>
             </div>
-        </div>
 
-        <!-- CAMEFITE -->
-        <div id="panel-camefite" class="dropdown-panel">
-            <div class="subclass-links-list">
-                <a href="ch-suffruticose.html" class="subclass-item-link">Ch. Suffruticose</a>
-                <a href="ch-scapose.html" class="subclass-item-link">Ch. Scapose</a>
-                <a href="ch-reptanti.html" class="subclass-item-link">Ch. Reptanti</a>
-                <a href="ch-pulvinate.html" class="subclass-item-link">Ch. Pulvinate</a>
-                <a href="ch-fruticose.html" class="subclass-item-link">Ch. Fruticose</a>
-                <a href="ch-sarmentose.html" class="subclass-item-link">Ch. Sarmentose</a>
+            <!-- CAMEFITE (Sfondo: Piccolo arbusto montano/pianta bassa) -->
+            <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
+                <div class="card-overlay"></div>
+                <div class="card-title">🌱 Camefite</div>
+                <div class="card-dropdown-content">
+                    <a href="ch-suffruticose.html" class="subclass-link">Ch. Suffruticose</a>
+                    <a href="ch-scapose.html" class="subclass-link">Ch. Scapose</a>
+                    <a href="ch-reptanti.html" class="subclass-link">Ch. Reptanti</a>
+                    <a href="ch-pulvinate.html" class="subclass-link">Ch. Pulvinate</a>
+                    <a href="ch-fruticose.html" class="subclass-link">Ch. Fruticose</a>
+                    <a href="ch-sarmentose.html" class="subclass-link">Ch. Sarmentose</a>
+                    <div class="back-indicator">↩ Clicca fuori per chiudere</div>
+                </div>
             </div>
-        </div>
 
-        <!-- TEROFITE -->
-        <div id="panel-terofite" class="dropdown-panel">
-            <div class="subclass-links-list">
-                <a href="t-scapose.html" class="subclass-item-link">T. scapose</a>
-                <a href="t-cespitose.html" class="subclass-item-link">T. cespitose</a>
-                <a href="t-rosulate.html" class="subclass-item-link">T. rosulate</a>
-                <a href="t-parassite.html" class="subclass-item-link">T. parassite</a>
+            <!-- TEROFITE (Sfondo: Fiori di campo annuali) -->
+            <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1550950158-d0d960dff51b?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
+                <div class="card-overlay"></div>
+                <div class="card-title">🌾 Terofite</div>
+                <div class="card-dropdown-content">
+                    <a href="t-scapose.html" class="subclass-link">T. scapose</a>
+                    <a href="t-cespitose.html" class="subclass-link">T. cespitose</a>
+                    <a href="t-rosulate.html" class="subclass-link">T. rosulate</a>
+                    <a href="t-parassite.html" class="subclass-link">T. parassite</a>
+                    <div class="back-indicator">↩ Clicca fuori per chiudere</div>
+                </div>
             </div>
-        </div>
 
-        <!-- GEOFITE -->
-        <div id="panel-geofite" class="dropdown-panel">
-            <div class="subclass-links-list">
-                <a href="g-bulbose.html" class="subclass-item-link">G. bulbose</a>
-                <a href="g-rizomatose.html" class="subclass-item-link">G. rizomatose</a>
-                <a href="g-radicigemmate.html" class="subclass-item-link">G. radicigemmate</a>
-                <a href="g-parassite.html" class="subclass-item-link">G. parassite</a>
+            <!-- GEOFITE (Sfondo: Germogli e bulbi/fiori da bulbo selvatici) -->
+            <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
+                <div class="card-overlay"></div>
+                <div class="card-title">🧅 Geofite</div>
+                <div class="card-dropdown-content">
+                    <a href="g-bulbose.html" class="subclass-link">G. bulbose</a>
+                    <a href="g-rizomatose.html" class="subclass-link">G. rizomatose</a>
+                    <a href="g-radicigemmate.html" class="subclass-link">G. radicigemmate</a>
+                    <a href="g-parassite.html" class="subclass-link">G. parassite</a>
+                    <div class="back-indicator">↩ Clicca fuori per chiudere</div>
+                </div>
             </div>
-        </div>
 
-        <!-- EMICRITTOFITE -->
-        <div id="panel-emicriptofite" class="dropdown-panel">
-            <div class="subclass-links-list">
-                <a href="e-biennali.html" class="subclass-item-link">E. biennali</a>
-                <a href="e-cespitose.html" class="subclass-item-link">E. cespitose</a>
-                <a href="e-scapose.html" class="subclass-item-link">E. scapose</a>
-                <a href="e-reptanti.html" class="subclass-item-link">E. reptanti</a>
-                <a href="e-rosulate.html" class="subclass-item-link">E. rosulate</a>
-                <a href="e-scandenti.html" class="subclass-item-link">E. scandenti</a>
+            <!-- EMICRITTOFITE (Sfondo: Erba folta e ciuffi verdi) -->
+            <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1533460004989-cef01064af7e?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
+                <div class="card-overlay"></div>
+                <div class="card-title">🌿 Emicriptofite</div>
+                <div class="card-dropdown-content">
+                    <a href="e-biennali.html" class="subclass-link">E. biennali</a>
+                    <a href="e-cespitose.html" class="subclass-link">E. cespitose</a>
+                    <a href="e-scapose.html" class="subclass-link">E. scapose</a>
+                    <a href="e-reptanti.html" class="subclass-link">E. reptanti</a>
+                    <a href="e-rosulate.html" class="subclass-link">E. rosulate</a>
+                    <a href="e-scandenti.html" class="subclass-link">E. scandenti</a>
+                    <div class="back-indicator">↩ Clicca fuori per chiudere</div>
+                </div>
             </div>
-        </div>
 
-        <!-- IDROFITE -->
-        <div id="panel-idrofite" class="dropdown-panel">
-            <div class="subclass-links-list">
-                <a href="i-natanti.html" class="subclass-item-link">I. natanti</a>
-                <a href="i-radicanti.html" class="subclass-item-link">I. radicanti</a>
+            <!-- IDROFITE (Sfondo: Piante galleggianti su acqua) -->
+            <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
+                <div class="card-overlay"></div>
+                <div class="card-title">💧 Idrofite</div>
+                <div class="card-dropdown-content">
+                    <a href="i-natanti.html" class="subclass-link">I. natanti</a>
+                    <a href="i-radicanti.html" class="subclass-link">I. radicanti</a>
+                    <div class="back-indicator">↩ Clicca fuori per chiudere</div>
+                </div>
             </div>
-        </div>
 
-        <!-- ELOFITE -->
-        <div id="panel-elofite" class="dropdown-panel">
-            <div class="subclass-links-list">
-                <a href="elofite-elenco.html" class="subclass-item-link">Elofite</a>
+            <!-- ELOFITE (Sfondo: Piante da canneto/palude) -->
+            <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
+                <div class="card-overlay"></div>
+                <div class="card-title">🌱 Elofite</div>
+                <div class="card-dropdown-content">
+                    <a href="elofite-elenco.html" class="subclass-link">Visualizza Elofite</a>
+                    <div class="back-indicator">↩ Clicca fuori per chiudere</div>
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
 
-    <!-- LOGICA DI APERTURA ORIZZONTALE -->
+    <!-- LOGICA DI INTERAZIONE FOTOGRAFICA -->
     <script>
-        function apriCategoria(bottoneScelto, idPannello) {
-            document.querySelectorAll('.dropdown-panel').forEach(p => p.style.display = 'none');
-            document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-            
-            const pannello = document.getElementById(idPannello);
-            pannello.style.display = 'block';
-            bottoneScelto.classList.add('active');
+        function attivaScheda(scheda, evento) {
+            // Se l'utente clicca su un link interno, non fare nulla e asseconda il reindirizzamento
+            if (evento.target.tagName === 'A') return;
+
+            // Controlla se la scheda cliccata era già attiva
+            const eraGiaAttiva = scheda.classList.contains('active');
+
+            // Disattiva tutte le schede aperte
+            document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+
+            // Se la scheda non era attiva, attivala ora
+            if (!eraGiaAttiva) {
+                scheda.classList.add('active');
+            }
         }
+
+        // Se l'utente clicca fuori dalle schede, resetta la visualizzazione e mostra di nuovo le foto pulite
+        document.addEventListener('click', function(evento) {
+            if (!evento.target.closest('.category-card')) {
+                document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+            }
+        });
     </script>
 </body>
 </html>
