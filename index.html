@@ -39,7 +39,7 @@
 
         .section-title { text-align: center; font-size: 1.6rem; color: #1e4b2b; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* 2. LA GRIGLIA DELLE SCHEDE FOTOGRAFICHE */
+        /* 2. LA GRIGLIA DELLE SCHE DE FOTOGRAFICHE */
         .grid-categories {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -64,7 +64,7 @@
             box-shadow: 0 8px 25px rgba(18,41,25,0.15);
         }
 
-        /* Copertura iniziale: lascia vedere la foto ma rende il testo leggibile */
+        /* Copertura iniziale */
         .card-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -85,7 +85,7 @@
             transition: all 0.3s ease;
         }
 
-        /* 3. IL PANNELLO DELLE SOTTOCATEGORIE (Nascosto all'inizio) */
+        /* 3. IL PANNELLO DELLE SOTTOCATEGORIE */
         .card-dropdown-content {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -101,13 +101,13 @@
             transform: translateY(10px);
         }
 
-        /* STATO ATTIVO: Quando si clicca, la foto passa in secondo piano e appaiono i link */
+        /* STATO ATTIVO */
         .category-card.active .card-overlay {
-            background: rgba(12, 31, 17, 0.92); /* La foto scurisce e va in secondo piano */
+            background: rgba(12, 31, 17, 0.94); 
         }
         
         .category-card.active .card-title {
-            opacity: 0; /* Il titolo grande sparisce per lasciare spazio */
+            opacity: 0; 
             transform: translateY(-10px);
         }
 
@@ -117,7 +117,7 @@
             transform: translateY(0);
         }
 
-        /* I bottoni delle Sottocategorie dentro la foto */
+        /* I bottoni delle Sottocategorie */
         .subclass-link {
             display: block;
             background: rgba(255, 255, 255, 0.12);
@@ -152,7 +152,6 @@
 </head>
 <body>
 
-    <!-- 1. RIQUADRO GRANDE SUPERIORE -->
     <div class="hero-banner">
         <div class="hero-overlay"></div>
         <div class="hero-text">
@@ -165,11 +164,9 @@
         
         <h2 class="section-title">Classificazione secondo le Forme Biologiche di Raunkiær</h2>
 
-        <!-- 2. GRIGLIA FOTOGRAFICA DELLE CATEGORIE -->
         <div class="grid-categories">
 
-            <!-- FANEROFITE (Sfondo: Grande albero/bosco) -->
-            <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
+            <div id="card-fanerofite" class="category-card" style="background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
                 <div class="card-overlay"></div>
                 <div class="card-title">🪵 Fanerofite</div>
                 <div class="card-dropdown-content">
@@ -183,7 +180,6 @@
                 </div>
             </div>
 
-            <!-- CAMEFITE (Sfondo: Piccolo arbusto montano/pianta bassa) -->
             <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
                 <div class="card-overlay"></div>
                 <div class="card-title">🌱 Camefite</div>
@@ -198,7 +194,6 @@
                 </div>
             </div>
 
-            <!-- TEROFITE (Sfondo: Fiori di campo annuali) -->
             <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1550950158-d0d960dff51b?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
                 <div class="card-overlay"></div>
                 <div class="card-title">🌾 Terofite</div>
@@ -211,7 +206,6 @@
                 </div>
             </div>
 
-            <!-- GEOFITE (Sfondo: Germogli e bulbi/fiori da bulbo selvatici) -->
             <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
                 <div class="card-overlay"></div>
                 <div class="card-title">🧅 Geofite</div>
@@ -224,7 +218,6 @@
                 </div>
             </div>
 
-            <!-- EMICRITTOFITE (Sfondo: Erba folta e ciuffi verdi) -->
             <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1533460004989-cef01064af7e?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
                 <div class="card-overlay"></div>
                 <div class="card-title">🌿 Emicriptofite</div>
@@ -239,8 +232,7 @@
                 </div>
             </div>
 
-            <!-- IDROFITE (Sfondo: Piante galleggianti su acqua) -->
-            <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
+            <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1501625866166-5f75e3be5385?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
                 <div class="card-overlay"></div>
                 <div class="card-title">💧 Idrofite</div>
                 <div class="card-dropdown-content">
@@ -250,7 +242,6 @@
                 </div>
             </div>
 
-            <!-- ELOFITE (Sfondo: Piante da canneto/palude) -->
             <div class="category-card" style="background-image: url('https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?auto=format&fit=crop&w=600&q=80');" onclick="attivaScheda(this, event)">
                 <div class="card-overlay"></div>
                 <div class="card-title">🌱 Elofite</div>
@@ -263,25 +254,21 @@
         </div>
     </div>
 
-    <!-- LOGICA DI INTERAZIONE FOTOGRAFICA -->
     <script>
+        // All'avvio la prima categoria (Fanerofite) si mostra già espansa
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('card-fanerofite').classList.add('active');
+        });
+
         function attivaScheda(scheda, evento) {
-            // Se l'utente clicca su un link interno, non fare nulla e asseconda il reindirizzamento
             if (evento.target.tagName === 'A') return;
-
-            // Controlla se la scheda cliccata era già attiva
             const eraGiaAttiva = scheda.classList.contains('active');
-
-            // Disattiva tutte le schede aperte
             document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
-
-            // Se la scheda non era attiva, attivala ora
             if (!eraGiaAttiva) {
                 scheda.classList.add('active');
             }
         }
 
-        // Se l'utente clicca fuori dalle schede, resetta la visualizzazione e mostra di nuovo le foto pulite
         document.addEventListener('click', function(evento) {
             if (!evento.target.closest('.category-card')) {
                 document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
