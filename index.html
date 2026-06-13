@@ -3,453 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flora della Campania - Archivio Botanico Interattivo</title>
+    <title>Flora della Campania - Archivio Botanico</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        /* Sfondo consono a tema botanico e naturale */
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            line-height: 1.6; 
-            color: #2b3a2f; 
-            background-color: #f3f7f4;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(46, 111, 64, 0.03) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(30, 75, 43, 0.04) 0%, transparent 50%),
-                linear-gradient(135deg, #f4f8f5 0%, #e8f0e9 100%);
-            background-attachment: fixed;
-            padding: 20px; 
-        }
-        
-        .container { 
-            max-width: 1100px; 
-            margin: 0 auto; 
-            background: rgba(255, 255, 255, 0.96); 
-            padding: 40px; 
-            border-radius: 16px; 
-            box-shadow: 0 10px 30px rgba(24, 54, 32, 0.06); 
-            border: 1px solid #d8ebdcd9;
-            backdrop-filter: blur(5px);
-        }
-        
-        /* Intestazione principale */
-        header { 
-            text-align: center; 
-            border-bottom: 3px solid #2e6f40; 
-            padding-bottom: 25px; 
-            margin-bottom: 30px; 
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f5; color: #2b3a2f; }
+
+        /* 1. RIQUADRO GRANDE CON TITOLO, SOTTOTITOLO E SFONDO IMMAGINE NATURA */
+        .hero-banner {
             position: relative;
-        }
-        header h1 { 
-            color: #1e4b2b; 
-            font-size: 2.8rem; 
-            letter-spacing: 1px; 
-            text-transform: uppercase; 
-            margin-bottom: 8px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-        }
-        header p { 
-            color: #4c6653; 
-            font-size: 1.3rem; 
-            font-style: italic; 
-            font-weight: 500; 
+            width: 100%;
+            height: 320px;
+            background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        /* Menu di Navigazione per le Pagine Suggerite */
-        .site-nav {
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(18, 41, 25, 0.6); 
+            z-index: 1;
+        }
+
+        .hero-text {
+            position: relative;
+            z-index: 2;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero-text h1 {
+            font-size: 3.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+        }
+
+        .hero-text p {
+            font-size: 1.4rem;
+            font-style: italic;
+            opacity: 0.95;
+            font-weight: 300;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px 20px;
+        }
+
+        /* 2. BARRA ORIZZONTALE DELLE CATEGORIE RAUNKIÆR */
+        .biological-nav {
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
+            justify-content: space-between;
+            background: #2e6f40;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
-        .nav-btn {
-            text-decoration: none;
-            color: #2e6f40;
-            background: #edf4ef;
-            padding: 10px 20px;
-            border-radius: 30px;
+
+        .nav-tab {
+            flex: 1;
+            min-width: 130px;
+            text-align: center;
+            padding: 18px 10px;
+            color: white;
             font-weight: bold;
-            font-size: 0.95rem;
-            border: 1px solid #cfe2d4;
+            font-size: 1.05rem;
+            cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            user-select: none;
+            border-right: 1px solid rgba(255,255,255,0.1);
         }
-        .nav-btn:hover {
-            background: #2e6f40;
-            color: white;
+
+        .nav-tab:last-child { border-right: none; }
+        .nav-tab:hover { background: #235431; }
+        .nav-tab.active { background: #1a3f24; box-shadow: inset 0 -4px 0 #8cbd9b; }
+
+        /* 3. PANNELLI DI DISCESA CON LINK DI REINDIRIZZAMENTO */
+        .dropdown-panel {
+            display: none;
+            background: white;
+            border: 1px solid #d2e1d6;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Lista delle sottocategorie cliccabili */
+        .subclass-links-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        @media (min-width: 768px) { .subclass-links-list { grid-template-columns: 1fr 1fr; } }
+
+        .subclass-item-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fafdfb;
+            border: 1px solid #e1e9e3;
+            padding: 15px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #1e4b2b;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+        }
+
+        .subclass-item-link:hover {
+            background: #edf4ef;
             border-color: #2e6f40;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(46,111,64,0.15);
-        }
-        .nav-btn.active {
-            background: #1e4b2b;
-            color: white;
-            border-color: #1e4b2b;
+            transform: translateX(3px);
         }
 
-        /* Dashboard: Ricerca e Statistiche */
-        .dashboard { 
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 20px; 
-            margin-bottom: 35px; 
+        .subclass-item-link::after {
+            content: "➔";
+            color: #2e6f40;
+            font-size: 1rem;
+            transition: transform 0.2s;
         }
-        @media (min-width: 768px) { .dashboard { grid-template-columns: 2fr 1fr; } }
-        
-        .search-box { 
-            background: #edf4ef; 
-            padding: 20px; 
-            border-radius: 10px; 
-            border: 1px solid #cfe2d4; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
+        .subclass-item-link:hover::after {
+            transform: translateX(4px);
         }
-        .search-box label { font-weight: bold; color: #1e4b2b; margin-bottom: 8px; font-size: 0.95rem; }
-        .search-box input { padding: 12px 15px; border: 1px solid #abbfb0; border-radius: 8px; font-size: 1rem; color: #2b3a2f; background: white; }
-        .search-box input:focus { outline: none; border-color: #2e6f40; box-shadow: 0 0 0 3px rgba(46,111,64,0.15); }
-        
-        .stats-box { 
-            background: linear-gradient(135deg, #1e4b2b 0%, #2e6f40 100%); 
-            color: #eaf2ec; 
-            padding: 20px; 
-            border-radius: 10px; 
-            text-align: center; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(30,75,43,0.15);
-        }
-        .stats-count { font-size: 2.4rem; font-weight: bold; color: #ffffff; line-height: 1; }
-
-        /* Pannello Informativo Botanico */
-        .info-panel { 
-            background: #fafdfb; 
-            border: 1px solid #d8ebdcd9; 
-            border-left: 5px solid #2e6f40; 
-            padding: 22px; 
-            border-radius: 4px; 
-            margin-bottom: 35px; 
-            font-size: 0.98rem; 
-            text-align: justify; 
-        }
-        .info-panel h3 { color: #1e4b2b; margin-bottom: 8px; font-size: 1.15rem; }
-
-        /* Sezione Accordion (Menu a Discesa) */
-        .accordion-container { display: flex; flex-direction: column; gap: 15px; }
-        .accordion-item { border: 1px solid #d2e1d6; border-radius: 10px; overflow: hidden; background: #ffffff; box-shadow: 0 3px 8px rgba(0,0,0,0.01); transition: border 0.2s; }
-        .accordion-item:hover { border-color: #abbfb0; }
-        
-        .accordion-header { 
-            background: #2e6f40; 
-            color: white; 
-            padding: 18px 24px; 
-            font-size: 1.3rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            transition: background 0.2s; 
-            user-select: none; 
-        }
-        .accordion-header:hover { background: #235431; }
-        .accordion-header::after { content: '▼'; font-size: 0.85rem; transition: transform 0.3s; }
-        .accordion-item.active .accordion-header::after { transform: rotate(180deg); }
-        .accordion-content { display: none; padding: 25px; background: #fafdfb; border-top: 1px solid #edf4ef; }
-        
-        /* Sottoclassi e Tabelle */
-        .subclass-group { margin-bottom: 25px; background: white; border: 1px solid #e1e9e3; border-radius: 8px; padding: 18px; box-shadow: 0 2px 4px rgba(0,0,0,0.01); }
-        .subclass-group:last-child { margin-bottom: 0; }
-        .subclass-title { font-size: 1.1rem; font-weight: bold; color: #1e4b2b; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px dashed #cfe2d4; display: flex; align-items: center; }
-        .subclass-title::before { content: "❖"; margin-right: 8px; color: #2e6f40; }
-        
-        .flora-table { width: 100%; border-collapse: collapse; }
-        .flora-table th { background: #edf4ef; text-align: left; padding: 12px; font-size: 0.9rem; color: #415647; font-weight: bold; border-bottom: 2px solid #cfe2d4; }
-        .flora-table td { padding: 14px 12px; border-bottom: 1px solid #edf4ef; font-size: 0.98rem; vertical-align: top; }
-        .flora-table tr:last-child td { border-bottom: none; }
-        .flora-table tr:hover td { background: #f4faf6; }
-        
-        .botanical-link { font-weight: bold; }
-        .botanical-link a { color: #2e6f40; text-decoration: none; font-style: italic; }
-        .botanical-link a:hover { text-decoration: underline; }
-        .synonyms-span { display: block; font-size: 0.85rem; color: #687e6e; font-weight: normal; margin-top: 5px; }
-        .common-span { color: #333; display: block; font-weight: 500; }
-        .no-data { color: #7a9281; font-style: italic; font-size: 0.92rem; padding: 5px 0; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Intestazione del Sito -->
-        <header>
+    <!-- 1. RIQUADRO GRANDE SUPERIORE -->
+    <div class="hero-banner">
+        <div class="hero-overlay"></div>
+        <div class="hero-text">
             <h1>Flora della Campania</h1>
             <p>Alberi, arbusti, erbe e fiori selvatici della Campania</p>
-        </header>
-
-        <!-- Menu di Navigazione Superiore (Suggerimenti Accettati) -->
-        <nav class="site-nav">
-            <a href="index.html" class="nav-btn active">🌿 Indice Forme Biologiche</a>
-            <a href="ambienti.html" class="nav-btn">🗺️ I Grandi Ambienti</a>
-            <a href="guida.html" class="nav-btn">📖 Guida a Raunkiær</a>
-        </nav>
-
-        <!-- Dashboard di Ricerca Istituzionale e Contatore Biodiversità -->
-        <div class="dashboard">
-            <div class="search-box">
-                <label for="search-input">Cerca una pianta nell'intero archivio:</label>
-                <input type="text" id="search-input" placeholder="Es. Achillea, Adriala, pelosella, millefoglio..." onkeyup="filtraPiante()">
-            </div>
-            <div class="stats-box">
-                <div class="stats-count" id="global-count">2</div>
-                <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; font-weight: bold;">Specie in Archivio</div>
-            </div>
-        </div>
-
-        <!-- Contesto Scientifico -->
-        <div class="info-panel">
-            <h3>La classificazione biologica del territorio</h3>
-            <p>Questo archivio adotta lo schema delle <strong>Forme Biologiche di Raunkiær</strong>. Classificare la flora spontanea della Campania in base alla posizione delle gemme durante la stagione avversa permette di comprendere profondamente gli adattamenti ecologici e microclimatici presenti dalle coste tirreniche fino alle vette dell'Appennino campano.</p>
-        </div>
-
-        <!-- Contenitore Principale Elenchi a Discesa (Accordion) -->
-        <div class="accordion-container">
-
-            <!-- 1. FANEROFITE -->
-            <div class="accordion-item">
-                <div class="accordion-header">🪵 Fanerofite (P)</div>
-                <div class="accordion-content">
-                    <div class="subclass-group">
-                        <div class="subclass-title">F. arboree</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">F. cespugliose</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">F. striscianti</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">F. succulente</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">F. epifete</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">F. fruticose</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. CAMEFITE -->
-            <div class="accordion-item">
-                <div class="accordion-header">🌱 Camefite (Ch)</div>
-                <div class="accordion-content">
-                    <div class="subclass-group">
-                        <div class="subclass-title">Ch. Suffruticose</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">Ch. Scapose</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">Ch. Reptanti</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">Ch. Pulvinate</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">Ch. fruticose</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">Ch. sarmentose</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. TEROFITE -->
-            <div class="accordion-item">
-                <div class="accordion-header">🌾 Terofite (T)</div>
-                <div class="accordion-content">
-                    <div class="subclass-group">
-                        <div class="subclass-title">T. scapose</div>
-                        <table class="flora-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 50%;">Nome Scientifico & Sinonimi</th>
-                                    <th style="width: 50%;">Nomi Comuni / Regionali</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="pianta-row">
-                                    <td class="botanical-link">
-                                        <a href="andryala.html">Andryala dentata Sm.</a>
-                                        <span class="synonyms-span">Syn: <i>Andryala integrifolia</i> L., <i>Andryala sinuata</i> L.</span>
-                                    </td>
-                                    <td><span class="common-span">Adriala dentata, Lanutella dentata, Pelosella, Lanolina</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">T. cespitose</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">T. rosulate</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">T. parassite</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. GEOFITE -->
-            <div class="accordion-item">
-                <div class="accordion-header">🧅 Geofite (G)</div>
-                <div class="accordion-content">
-                    <div class="subclass-group">
-                        <div class="subclass-title">G. bulbose</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">G. rizomatose</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">G. radicigemmate</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">G. parassite</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 5. EMICRITTOFITE -->
-            <div class="accordion-item">
-                <div class="accordion-header">🌿 Emicriptofite (H)</div>
-                <div class="accordion-content">
-                    <div class="subclass-group">
-                        <div class="subclass-title">E. biennali</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">E. cespitose</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">E. scapose</div>
-                        <table class="flora-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 50%;">Nome Scientifico & Sinonimi</th>
-                                    <th style="width: 50%;">Nomi Comuni / Regionali</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="pianta-row">
-                                    <td class="botanical-link">
-                                        <a href="achillea.html">Achillea tenorei Grande</a>
-                                        <span class="synonyms-span">Syn: <i>Achillea mucronulata</i> Bertol.</span>
-                                    </td>
-                                    <td><span class="common-span">Millefoglio di Tenore</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">E. reptanti</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">E. rosulate</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">E. scandenti</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 6. IDROFITE -->
-            <div class="accordion-item">
-                <div class="accordion-header">💧 Idrofite (I)</div>
-                <div class="accordion-content">
-                    <div class="subclass-group">
-                        <div class="subclass-title">I. natanti</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                    <div class="subclass-group">
-                        <div class="subclass-title">I. radicanti</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa sottoclasse.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 7. ELOFITE -->
-            <div class="accordion-item">
-                <div class="accordion-header">🌱 Elofite</div>
-                <div class="accordion-content">
-                    <div class="subclass-group">
-                        <div class="subclass-title">Elofite</div>
-                        <div class="no-data">Nessuna specie ancora registrata in questa categoria.</div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 
-    <!-- Script di Controllo Dinamico -->
-    <script>
-        // Gestione apertura/chiusura degli elenchi a discesa
-        document.querySelectorAll('.accordion-header').forEach(header => {
-            header.addEventListener('click', () => {
-                const item = header.parentElement;
-                item.classList.toggle('active');
-                const content = item.querySelector('.accordion-content');
-                if (item.classList.contains('active')) {
-                    content.style.display = 'block';
-                } else {
-                    content.style.display = 'none';
-                }
-            });
-        });
+    <div class="main-container">
 
-        // Motore di ricerca intelligente incorporato
-        function filtraPiante() {
-            const input = document.getElementById('search-input').value.toLowerCase();
-            const rows = document.querySelectorAll('.pianta-row');
+        <!-- 2. BARRA ORIZZONTALE DELLE CATEGORIE -->
+        <div class="biological-nav">
+            <div class="nav-tab" onclick="apriCategoria(this, 'panel-fanerofite')">Fanerofite</div>
+            <div class="nav-tab" onclick="apriCategoria(this, 'panel-camefite')">Camefite</div>
+            <div class="nav-tab" onclick="apriCategoria(this, 'panel-terofite')">Terofite</div>
+            <div class="nav-tab" onclick="apriCategoria(this, 'panel-geofite')">Geofite</div>
+            <div class="nav-tab" onclick="apriCategoria(this, 'panel-emicriptofite')">Emicriptofite</div>
+            <div class="nav-tab" onclick="apriCategoria(this, 'panel-idrofite')">Idrofite</div>
+            <div class="nav-tab" onclick="apriCategoria(this, 'panel-elofite')">Elofite</div>
+        </div>
+
+        <!-- 3. STRUTTURE A DISCESA CON LE SOTTOCATEGORIE (LINK ALLE FUTURE PAGINE) -->
+
+        <!-- FANEROFITE -->
+        <div id="panel-fanerofite" class="dropdown-panel">
+            <div class="subclass-links-list">
+                <a href="f-arboree.html" class="subclass-item-link">F. arboree</a>
+                <a href="f-cespugliose.html" class="subclass-item-link">F. cespugliose</a>
+                <a href="f-striscianti.html" class="subclass-item-link">F. striscianti</a>
+                <a href="f-succulente.html" class="subclass-item-link">F. succulente</a>
+                <a href="f-epifete.html" class="subclass-item-link">F. epifete</a>
+                <a href="f-fruticose.html" class="subclass-item-link">F. fruticose</a>
+            </div>
+        </div>
+
+        <!-- CAMEFITE -->
+        <div id="panel-camefite" class="dropdown-panel">
+            <div class="subclass-links-list">
+                <a href="ch-suffruticose.html" class="subclass-item-link">Ch. Suffruticose</a>
+                <a href="ch-scapose.html" class="subclass-item-link">Ch. Scapose</a>
+                <a href="ch-reptanti.html" class="subclass-item-link">Ch. Reptanti</a>
+                <a href="ch-pulvinate.html" class="subclass-item-link">Ch. Pulvinate</a>
+                <a href="ch-fruticose.html" class="subclass-item-link">Ch. Fruticose</a>
+                <a href="ch-sarmentose.html" class="subclass-item-link">Ch. Sarmentose</a>
+            </div>
+        </div>
+
+        <!-- TEROFITE -->
+        <div id="panel-terofite" class="dropdown-panel">
+            <div class="subclass-links-list">
+                <a href="t-scapose.html" class="subclass-item-link">T. scapose</a>
+                <a href="t-cespitose.html" class="subclass-item-link">T. cespitose</a>
+                <a href="t-rosulate.html" class="subclass-item-link">T. rosulate</a>
+                <a href="t-parassite.html" class="subclass-item-link">T. parassite</a>
+            </div>
+        </div>
+
+        <!-- GEOFITE -->
+        <div id="panel-geofite" class="dropdown-panel">
+            <div class="subclass-links-list">
+                <a href="g-bulbose.html" class="subclass-item-link">G. bulbose</a>
+                <a href="g-rizomatose.html" class="subclass-item-link">G. rizomatose</a>
+                <a href="g-radicigemmate.html" class="subclass-item-link">G. radicigemmate</a>
+                <a href="g-parassite.html" class="subclass-item-link">G. parassite</a>
+            </div>
+        </div>
+
+        <!-- EMICRITTOFITE -->
+        <div id="panel-emicriptofite" class="dropdown-panel">
+            <div class="subclass-links-list">
+                <a href="e-biennali.html" class="subclass-item-link">E. biennali</a>
+                <a href="e-cespitose.html" class="subclass-item-link">E. cespitose</a>
+                <a href="e-scapose.html" class="subclass-item-link">E. scapose</a>
+                <a href="e-reptanti.html" class="subclass-item-link">E. reptanti</a>
+                <a href="e-rosulate.html" class="subclass-item-link">E. rosulate</a>
+                <a href="e-scandenti.html" class="subclass-item-link">E. scandenti</a>
+            </div>
+        </div>
+
+        <!-- IDROFITE -->
+        <div id="panel-idrofite" class="dropdown-panel">
+            <div class="subclass-links-list">
+                <a href="i-natanti.html" class="subclass-item-link">I. natanti</a>
+                <a href="i-radicanti.html" class="subclass-item-link">I. radicanti</a>
+            </div>
+        </div>
+
+        <!-- ELOFITE -->
+        <div id="panel-elofite" class="dropdown-panel">
+            <div class="subclass-links-list">
+                <a href="elofite-elenco.html" class="subclass-item-link">Elofite</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- LOGICA DI APERTURA ORIZZONTALE -->
+    <script>
+        function apriCategoria(bottoneScelto, idPannello) {
+            document.querySelectorAll('.dropdown-panel').forEach(p => p.style.display = 'none');
+            document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
             
-            rows.forEach(row => {
-                const testo = row.innerText.toLowerCase();
-                if (testo.includes(input)) {
-                    row.style.display = '';
-                    let parentContent = row.closest('.accordion-content');
-                    if(parentContent && input.length > 1) {
-                        parentContent.style.display = 'block';
-                        parentContent.parentElement.classList.add('active');
-                    }
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+            const pannello = document.getElementById(idPannello);
+            pannello.style.display = 'block';
+            bottoneScelto.classList.add('active');
         }
     </script>
 </body>
