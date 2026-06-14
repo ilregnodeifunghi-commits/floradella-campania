@@ -1,50 +1,128 @@
-<div class="category-section" style="margin-top: 40px; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 6px solid #2e6f40;">
-    <h2 style="color: #1e4b2b; margin-bottom: 5px;">Fanerofite (P)</h2>
-    <p style="color: #687e6e; font-style: italic; margin-bottom: 20px;">Piante legnose perenni con gemme svernanti poste ad un'altezza dal suolo superiore ai 25-30 cm.</p>
-    
-    <div class="card-grid" style="display: block;">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flora della Campania - Home</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f2f6f3; color: #2b3a2f; padding: 30px 15px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 40px; }
+        header h1 { color: #1e4b2b; font-size: 2.2rem; margin-bottom: 10px; }
+        header p { color: #687e6e; font-size: 1.1rem; font-style: italic; }
         
-        <div class="card" style="background: #fafdfb; border: 1px solid #cfe2d4; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <h3 style="color: #1e4b2b; font-size: 1.1rem;">Fanerofite arboree (P scap)</h3>
-            <p style="font-size: 0.95rem; color: #4e5e52; margin-bottom: 10px;">Piante con fusto singolo eretto (scapo).</p>
-            <a href="F-arboree.html" class="btn" style="display: inline-block; background: #2e6f40; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.85rem;">Esplora Categoria</a>
-        </div>
+        .category-section { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 6px solid #2e6f40; margin-bottom: 30px; }
+        .category-section h2 { color: #1e4b2b; margin-bottom: 5px; font-size: 1.6rem; }
+        .category-subtitle { color: #687e6e; font-style: italic; margin-bottom: 20px; font-size: 0.95rem; }
+        
+        .card-grid { display: block; }
+        .card { background: #fafdfb; border: 1px solid #cfe2d4; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .card h3 { color: #1e4b2b; font-size: 1.15rem; margin-bottom: 5px; }
+        .card p { font-size: 0.95rem; color: #4e5e52; margin-bottom: 12px; }
+        
+        .btn { display: inline-block; background: #2e6f40; color: white; padding: 6px 14px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.85rem; transition: background 0.2s; }
+        .btn:hover { background: #1e4b2b; }
+    </style>
+</head>
+<body>
 
-        <div class="card" style="background: #fafdfb; border: 1px solid #cfe2d4; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <h3 style="color: #1e4b2b; font-size: 1.1rem;">Fanerofite cespitose (P caesp)</h3>
-            <p style="font-size: 0.95rem; color: #4e5e52; margin-bottom: 10px;">Piante cespugliose con ramificazioni dalla base.</p>
-            <a href="F-cespitose.html" class="btn" style="display: inline-block; background: #2e6f40; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.85rem;">Esplora Categoria</a>
-        </div>
+<div class="container">
 
-        <div class="card" style="background: #fafdfb; border: 1px solid #cfe2d4; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <h3 style="color: #1e4b2b; font-size: 1.1rem;">Fanerofite lianose (P lian)</h3>
-            <p style="font-size: 0.95rem; color: #4e5e52; margin-bottom: 10px;">Piante legnose rampicanti (liane).</p>
-            <a href="F-lianose.html" class="btn" style="display: inline-block; background: #2e6f40; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.85rem;">Esplora Categoria</a>
-        </div>
+    <header>
+        <h1>Flora della Campania</h1>
+        <p>Consultazione delle specie vegetali per Forme Biologiche</p>
+    </header>
 
-        <div class="card" style="background: #fafdfb; border: 1px solid #cfe2d4; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <h3 style="color: #1e4b2b; font-size: 1.1rem;">Fanerofite reptanti (P rept)</h3>
-            <p style="font-size: 0.95rem; color: #4e5e52; margin-bottom: 10px;">Piante con portamento strisciante sul terreno.</p>
-            <a href="F-reptanti.html" class="btn" style="display: inline-block; background: #2e6f40; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.85rem;">Esplora Categoria</a>
-        </div>
+    <div class="category-section">
+        <h2>Geofite (G)</h2>
+        <p class="category-subtitle">Piante perenni erbacee che portano le gemme svernanti in organi sotterranei.</p>
+        
+        <div class="card-grid">
+            <div class="card">
+                <h3>Geofite bulbose (G bulb)</h3>
+                <p>Piante munite di bulbo (es. Narcisi, Agli).</p>
+                <a href="g-bulbose.html" class="btn">Esplora Categoria</a>
+            </div>
 
-        <div class="card" style="background: #fafdfb; border: 1px solid #cfe2d4; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <h3 style="color: #1e4b2b; font-size: 1.1rem;">Fanerofite succulenti (P succ)</h3>
-            <p style="font-size: 0.95rem; color: #4e5e52; margin-bottom: 10px;">Piante con fusti o foglie carnose capaci di accumulare acqua.</p>
-            <a href="F-succulenti.html" class="btn" style="display: inline-block; background: #2e6f40; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.85rem;">Esplora Categoria</a>
-        </div>
+            <div class="card">
+                <h3>Geofite rizomatose (G rhiz)</h3>
+                <p>Piante provviste di rizoma, un fusto sotterraneo allungato.</p>
+                <a href="g-rizomatose.html" class="btn">Esplora Categoria</a>
+            </div>
 
-        <div class="card" style="background: #fafdfb; border: 1px solid #cfe2d4; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <h3 style="color: #1e4b2b; font-size: 1.1rem;">Fanerofite epifite (P ef)</h3>
-            <p style="font-size: 0.95rem; color: #4e5e52; margin-bottom: 10px;">Piante che crescono appoggiate ad altri vegetali.</p>
-            <a href="F-epifite.html" class="btn" style="display: inline-block; background: #2e6f40; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.85rem;">Esplora Categoria</a>
-        </div>
+            <div class="card">
+                <h3>Geofite parassite (G par)</h3>
+                <p>Piante prive di clorofilla che traggono nutrimento da altre piante.</p>
+                <a href="g-parassite.html" class="btn">Esplora Categoria</a>
+            </div>
 
-        <div class="card" style="background: #fafdfb; border: 1px solid #cfe2d4; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <h3 style="color: #1e4b2b; font-size: 1.1rem;">Fanerofite fruticose (P frut)</h3>
-            <p style="font-size: 0.95rem; color: #4e5e52; margin-bottom: 10px;">Arbusti legnosi di taglia generalmente ridotta.</p>
-            <a href="F-fruticose.html" class="btn" style="display: inline-block; background: #2e6f40; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.85rem;">Esplora Categoria</a>
-        </div>
+            <div class="card">
+                <h3>Geofite radicogemmate (G rad)</h3>
+                <p>Piante che si propagano per mezzo di gemme radicali sotterranee.</p>
+                <a href="g-radicogemmate.html" class="btn">Esplora Categoria</a>
+            </div>
 
+            <div class="card">
+                <h3>Geofite tuberose (G tub)</h3>
+                <p>Piante con organi di riserva sotterranei simili a tuberi.</p>
+                <a href="g-tuberose.html" class="btn">Esplora Categoria</a>
+            </div>
+        </div>
     </div>
+
+
+    <div class="category-section">
+        <h2>Fanerofite (P)</h2>
+        <p class="category-subtitle">Piante legnose perenni con gemme svernanti poste ad un'altezza dal suolo superiore ai 25-30 cm.</p>
+        
+        <div class="card-grid">
+            <div class="card">
+                <h3>Fanerofite arboree (P scap)</h3>
+                <p>Piante con fusto singolo eretto (scapo).</p>
+                <a href="F-arboree.html" class="btn">Esplora Categoria</a>
+            </div>
+
+            <div class="card">
+                <h3>Fanerofite cespitose (P caesp)</h3>
+                <p>Piante cespugliose con ramificazioni dalla base.</p>
+                <a href="F-cespitose.html" class="btn">Esplora Categoria</a>
+            </div>
+
+            <div class="card">
+                <h3>Fanerofite lianose (P lian)</h3>
+                <p>Piante legnose rampicanti (liane).</p>
+                <a href="F-lianose.html" class="btn">Esplora Categoria</a>
+            </div>
+
+            <div class="card">
+                <h3>Fanerofite reptanti (P rept)</h3>
+                <p>Piante con portamento strisciante sul terreno.</p>
+                <a href="F-reptanti.html" class="btn">Esplora Categoria</a>
+            </div>
+
+            <div class="card">
+                <h3>Fanerofite succulenti (P succ)</h3>
+                <p>Piante con fusti o foglie carnose capaci di accumulare acqua.</p>
+                <a href="F-succulenti.html" class="btn">Esplora Categoria</a>
+            </div>
+
+            <div class="card">
+                <h3>Fanerofite epifite (P ef)</h3>
+                <p>Piante che crescono appoggiate ad altri vegetali.</p>
+                <a href="F-epifite.html" class="btn">Esplora Categoria</a>
+            </div>
+
+            <div class="card">
+                <h3>Fanerofite fruticose (P frut)</h3>
+                <p>Arbusti legnosi di taglia generalmente ridotta.</p>
+                <a href="F-fruticose.html" class="btn">Esplora Categoria</a>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+</body>
+</html>
+Vai in fondo e premi il pulsante verde Commit changes.
