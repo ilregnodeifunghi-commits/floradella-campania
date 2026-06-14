@@ -12,17 +12,32 @@
         .back-btn { display: inline-block; text-decoration: none; color: #2e6f40; font-weight: bold; margin-bottom: 20px; }
         h1 { color: #1e4b2b; margin-bottom: 5px; }
         .sub-title { color: #687e6e; font-style: italic; margin-bottom: 35px; }
+        
         .taxonomy-block { background: #fafdfb; border: 1px solid #cfe2d4; border-left: 5px solid #2e6f40; border-radius: 6px; padding: 15px 20px; margin-top: 25px; margin-bottom: 10px; }
         .taxonomy-info { font-size: 1rem; color: #4e5e52; }
         .taxonomy-info strong { color: #1e4b2b; text-transform: uppercase; }
+        
         .flora-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
         .flora-table th { background: #edf4ef; text-align: left; padding: 12px; font-size: 0.9rem; color: #415647; border-bottom: 2px solid #cfe2d4; text-transform: uppercase; }
         .flora-table td { padding: 16px 12px; border-bottom: 1px solid #edf4ef; font-size: 1.05rem; vertical-align: top; }
-        .species-name { font-style: italic; font-weight: bold; color: #1e4b2b; font-size: 1.15rem; display: block; }
-        .tax-note { display: inline-block; font-size: 0.8rem; background: #eceff1; color: #546e7a; padding: 2px 6px; border-radius: 4px; margin-top: 6px; font-weight: 600; }
-        .tax-note.see { background: #ffebee; color: #c62828; }
+        
+        /* Grafica differenziata richiesta */
+        .current-species { font-family: 'Segoe UI', sans-serif; font-weight: bold; color: #1a365d; font-size: 1.2rem; display: block; scroll-margin-top: 20px; }
+        .sub-species { font-style: italic; font-weight: normal; color: #c53030; font-size: 1.15rem; display: block; }
+        
+        /* Stile del Link di Rimando */
+        .tax-link { display: inline-block; font-size: 0.85rem; background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; padding: 3px 8px; border-radius: 4px; margin-top: 6px; font-weight: bold; text-decoration: none; transition: background 0.2s; }
+        .tax-link:hover { background: #fed7d7; text-decoration: underline; }
+        
         .italian-names { color: #2c3e50; line-height: 1.5; font-weight: 500; }
         .loading { font-size: 1.2rem; color: #687e6e; font-style: italic; }
+        
+        /* Effetto lampeggiante temporaneo quando si clicca sul link e si salta alla specie */
+        @keyframes highlight {
+            0% { background-color: #fff9db; }
+            100% { background-color: transparent; }
+        }
+        .target-highlight { animation: highlight 2s ease-out; }
     </style>
 </head>
 <body>
@@ -49,56 +64,51 @@
         }
     });
 
+    // Funzione di utilità per creare un ID pulito per i link (es: "Nymphaea alba")
+    function createId(name) {
+        return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').trim();
+    }
+
     function renderTable(data) {
         const container = document.getElementById('database-content');
         let htmlOutput = "";
         let groups = {};
 
         data.forEach(row => {
-            // Verifichiamo che la riga abbia dati a sufficienza
             if(row.length < 6) return;
 
-            // Mappatura millimetrica sul tuo Excel (Colonna A = 0, B = 1, C = 2, ecc.)
             let formaBioSigla  = row[0] ? row[0].trim() : ""; // Colonna A
             let ordine         = row[3] ? row[3].trim() : ""; // Colonna D
             let famiglia       = row[4] ? row[4].trim() : ""; // Colonna E
             let specieValida   = row[5] ? row[5].trim() : ""; // Colonna F (Nome principale)
             let specieSinonimo = row[6] ? row[6].trim() : ""; // Colonna G (Sottospecie/Sinonimi)
             let notaVedi       = row[7] ? row[7].trim() : ""; // Colonna H ("VEDI")
-            let nomeAttuale    = row[8] ? row[8].trim() : ""; // Colonna I (Riferimento nome attuale)
+            let nomeAttuale    = row[8] ? row[8].trim() : ""; // Colonna I (Nome a cui rimanda)
             let nomiItaliani   = row[9] ? row[9].trim() : ""; // Colonna J
 
-            // Controllo se la cella della forma biologica contiene "I rad"
             if (formaBioSigla.includes(targetSigla)) {
                 
                 if(!ordine) ordine = "ORDINE NON SPECIFICATO";
                 if(!famiglia) famiglia = "FAMIGLIA NON SPECIFICATA";
 
-                // Determiniamo quale nome mostrare: se c'è una sottospecie/sinonimo usiamo quello, altrimenti il principale
-                let nomeDaMostrare = specieSinonimo ? specieSinonimo : specieValida;
-                
-                // Creiamo una nota tassonomica unendo il "VEDI" e l'eventuale "Nome attuale"
-                let notaCompleta = "";
-                if(notaVedi) notaCompleta += notaVedi;
-                if(nomeAttuale) notaCompleta += (notaCompleta ? " " : "") + nomeAttuale;
-
                 if (!groups[ordine]) groups[ordine] = {};
                 if (!groups[ordine][famiglia]) groups[ordine][famiglia] = [];
 
                 groups[ordine][famiglia].push({
-                    specie: nomeDaMostrare,
-                    nota: notaCompleta,
-                    nomi: nomiItaliani
+                    speciePrincipale: specieValida,
+                    sottospecie: specieSinonimo,
+                    vedi: notaVedi,
+                    destinazioneLink: nomeAttuale,
+                    nomiComuni: nomiItaliani
                 });
             }
         });
 
         if (Object.keys(groups).length === 0) {
-            container.innerHTML = "<p class='loading'>Nessuna pianta trovata nel file con la sigla 'I rad'. Controlla che i dati siano scritti in maiuscolo/minuscolo come nel file.</p>";
+            container.innerHTML = "<p class='loading'>Nessuna pianta trovata. Controlla il file.</p>";
             return;
         }
 
-        // Costruiamo la visualizzazione
         for (let ordine in groups) {
             for (let famiglia in groups[ordine]) {
                 htmlOutput += `
@@ -108,28 +118,46 @@
                     <table class="flora-table">
                         <thead>
                             <tr>
-                                <th style="width: 50%;">Specie / Sinonimo</th>
-                                <th style="width: 50%;">Nomi Italiani e Note</th>
+                                <th style="width: 55%;">Specie / Sottospecie</th>
+                                <th style="width: 45%;">Nomi Italiani e Note</th>
                             </tr>
                         </thead>
                         <tbody>
                 `;
 
                 groups[ordine][famiglia].forEach(pianta => {
+                    let rigaHtml = "";
                     let notaHtml = "";
-                    if(pianta.nota) {
-                        let isSee = pianta.nota.toLowerCase().includes('vedi');
-                        let tagClass = isSee ? 'tax-note see' : 'tax-note';
-                        notaHtml = `<span class="${tagClass}">${pianta.nota}</span>`;
+
+                    // CASO A: È una riga successiva (Sottospecie / Sinonimo)
+                    if (pianta.sottospecie) {
+                        rigaHtml = `<span class="sub-species">${pianta.sottospecie}</span>`;
+                        
+                        // Se c'è un rimando "VEDI Nomeattuale", creiamo il link ad ancora
+                        if (pianta.vedi || pianta.destinazioneLink) {
+                            let testoVisibile = (pianta.vedi ? pianta.vedi : "VEDI") + " " + (pianta.destinazioneLink ? pianta.destinazioneLink : "");
+                            let ancoraTarget = pianta.destinazioneLink ? createId(pianta.destinazioneLink) : "";
+                            
+                            if (ancoraTarget) {
+                                notaHtml = `<a href="#${ancoraTarget}" class="tax-link" onclick="highlightTarget('${ancoraTarget}')">🔗 ${testoVisibile}</a>`;
+                            } else {
+                                notaHtml = `<span class="tax-link" style="background:#f5f5f5; border-color:#ccc; color:#666;">${testoVisibile}</span>`;
+                            }
+                        }
+                    } 
+                    // CASO B: È la Specie Principale (Nome attuale)
+                    else {
+                        let idInvisibile = createId(pianta.speciePrincipale);
+                        rigaHtml = `<span class="current-species" id="${idInvisibile}">${pianta.speciePrincipale}</span>`;
                     }
 
                     htmlOutput += `
                         <tr>
                             <td>
-                                <span class="species-name">${pianta.specie}</span>
+                                ${rigaHtml}
                                 ${notaHtml}
                             </td>
-                            <td class="italian-names">${pianta.nomi ? pianta.nomi : "-"}</td>
+                            <td class="italian-names">${pianta.nomiComuni ? pianta.nomiComuni : "-"}</td>
                         </tr>
                     `;
                 });
@@ -138,6 +166,19 @@
             }
         }
         container.innerHTML = htmlOutput;
+    }
+
+    // Piccola funzione per far "lampeggiare" la riga di arrivo quando si clicca sul link
+    function highlightTarget(id) {
+        setTimeout(() => {
+            let el = document.getElementById(id);
+            if(el) {
+                let riga = el.closest('tr');
+                riga.classList.remove('target-highlight');
+                void riga.offsetWidth; // Trucco per resettare l'animazione CSS
+                riga.classList.add('target-highlight');
+            }
+        }, 50);
     }
 </script>
 
