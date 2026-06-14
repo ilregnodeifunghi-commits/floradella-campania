@@ -18,11 +18,10 @@
         .flora-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
         .flora-table th { background: #edf4ef; text-align: left; padding: 12px; font-size: 0.9rem; color: #415647; border-bottom: 2px solid #cfe2d4; text-transform: uppercase; }
         .flora-table td { padding: 16px 12px; border-bottom: 1px solid #edf4ef; font-size: 1.05rem; vertical-align: top; }
-        .genus-tag { font-size: 0.85rem; background: #e2ede5; color: #2e6f40; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 5px; }
         .species-name { font-style: italic; font-weight: bold; color: #1e4b2b; font-size: 1.15rem; display: block; }
         .tax-note { display: inline-block; font-size: 0.8rem; background: #eceff1; color: #546e7a; padding: 2px 6px; border-radius: 4px; margin-top: 6px; font-weight: 600; }
         .tax-note.see { background: #ffebee; color: #c62828; }
-        .italian-names { color: #2c3e50; line-height: 1.5; }
+        .italian-names { color: #2c3e50; line-height: 1.5; font-weight: 500; }
         .loading { font-size: 1.2rem; color: #687e6e; font-style: italic; }
     </style>
 </head>
@@ -39,7 +38,6 @@
 </div>
 
 <script>
-    // Diciamo alla pagina di cercare solo le piante con la sigla "I rad"
     const targetSigla = "I rad";
 
     Papa.parse("flora.csv", {
@@ -57,35 +55,50 @@
         let groups = {};
 
         data.forEach(row => {
-            if(row.length < 7) return;
+            // Verifichiamo che la riga abbia dati a sufficienza
+            if(row.length < 6) return;
 
-            // Leggiamo le colonne del tuo Excel (0 è la prima, 1 la seconda, ecc.)
-            let siglaFormaBio = row[0] ? row[0].trim() : "";
-            let ordine = row[3] ? row[3].trim() : "";
-            let famiglia = row[4] ? row[4].trim() : "";
-            let genere = row[5] ? row[5].trim() : "";
-            let specieCompleta = row[6] ? row[6].trim() : "";
-            let notaTassonomica = row[7] ? row[7].trim() : "";
-            let nomiItaliani = row[8] ? row[8].trim() : "";
+            // Mappatura millimetrica sul tuo Excel (Colonna A = 0, B = 1, C = 2, ecc.)
+            let formaBioSigla  = row[0] ? row[0].trim() : ""; // Colonna A
+            let ordine         = row[3] ? row[3].trim() : ""; // Colonna D
+            let famiglia       = row[4] ? row[4].trim() : ""; // Colonna E
+            let specieValida   = row[5] ? row[5].trim() : ""; // Colonna F (Nome principale)
+            let specieSinonimo = row[6] ? row[6].trim() : ""; // Colonna G (Sottospecie/Sinonimi)
+            let notaVedi       = row[7] ? row[7].trim() : ""; // Colonna H ("VEDI")
+            let nomeAttuale    = row[8] ? row[8].trim() : ""; // Colonna I (Riferimento nome attuale)
+            let nomiItaliani   = row[9] ? row[9].trim() : ""; // Colonna J
 
-            // Se la riga contiene la sigla "I rad", la teniamo
-            if (siglaFormaBio.includes(targetSigla)) {
-                if(!ordine) ordine = "-";
-                if(!famiglia) famiglia = "-";
+            // Controllo se la cella della forma biologica contiene "I rad"
+            if (formaBioSigla.includes(targetSigla)) {
+                
+                if(!ordine) ordine = "ORDINE NON SPECIFICATO";
+                if(!famiglia) famiglia = "FAMIGLIA NON SPECIFICATA";
+
+                // Determiniamo quale nome mostrare: se c'è una sottospecie/sinonimo usiamo quello, altrimenti il principale
+                let nomeDaMostrare = specieSinonimo ? specieSinonimo : specieValida;
+                
+                // Creiamo una nota tassonomica unendo il "VEDI" e l'eventuale "Nome attuale"
+                let notaCompleta = "";
+                if(notaVedi) notaCompleta += notaVedi;
+                if(nomeAttuale) notaCompleta += (notaCompleta ? " " : "") + nomeAttuale;
 
                 if (!groups[ordine]) groups[ordine] = {};
                 if (!groups[ordine][famiglia]) groups[ordine][famiglia] = [];
 
                 groups[ordine][famiglia].push({
-                    genere: genere,
-                    specie: specieCompleta,
-                    nota: notaTassonomica,
+                    specie: nomeDaMostrare,
+                    nota: notaCompleta,
                     nomi: nomiItaliani
                 });
             }
         });
 
-        // Generiamo i blocchi sulla pagina
+        if (Object.keys(groups).length === 0) {
+            container.innerHTML = "<p class='loading'>Nessuna pianta trovata nel file con la sigla 'I rad'. Controlla che i dati siano scritti in maiuscolo/minuscolo come nel file.</p>";
+            return;
+        }
+
+        // Costruiamo la visualizzazione
         for (let ordine in groups) {
             for (let famiglia in groups[ordine]) {
                 htmlOutput += `
@@ -95,25 +108,28 @@
                     <table class="flora-table">
                         <thead>
                             <tr>
-                                <th style="width: 50%;">Specie</th>
-                                <th style="width: 50%;">Nomi Italiani / Note</th>
+                                <th style="width: 50%;">Specie / Sinonimo</th>
+                                <th style="width: 50%;">Nomi Italiani e Note</th>
                             </tr>
                         </thead>
                         <tbody>
                 `;
 
                 groups[ordine][famiglia].forEach(pianta => {
-                    let isSeeNote = pianta.nota.toLowerCase().includes('vedi');
-                    let tagClass = isSeeNote ? 'tax-note see' : 'tax-note';
+                    let notaHtml = "";
+                    if(pianta.nota) {
+                        let isSee = pianta.nota.toLowerCase().includes('vedi');
+                        let tagClass = isSee ? 'tax-note see' : 'tax-note';
+                        notaHtml = `<span class="${tagClass}">${pianta.nota}</span>`;
+                    }
 
                     htmlOutput += `
                         <tr>
                             <td>
-                                <span class="genus-tag">Genere: ${pianta.genere}</span>
                                 <span class="species-name">${pianta.specie}</span>
-                                <span class="${tagClass}">${pianta.nota}</span>
+                                ${notaHtml}
                             </td>
-                            <td class="italian-names">${pianta.nomi}</td>
+                            <td class="italian-names">${pianta.nomi ? pianta.nomi : "-"}</td>
                         </tr>
                     `;
                 });
