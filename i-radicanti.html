@@ -34,7 +34,6 @@
         .italian-names { color: #2c3e50; line-height: 1.5; font-weight: 500; }
         .loading { font-size: 1.2rem; color: #687e6e; font-style: italic; }
         
-        /* Effetto lampo sulla riga quando si clicca sul link */
         @keyframes highlight {
             0% { background-color: #fff9db; }
             100% { background-color: transparent; }
@@ -61,13 +60,22 @@
         download: true,
         skipEmptyLines: true,
         complete: function(results) {
+            // Nascondiamo la scritta di caricamento in ogni caso
             document.getElementById('loading-status').style.display = 'none';
-            renderTable(results.data);
+            if (results && results.data) {
+                renderTable(results.data);
+            } else {
+                document.getElementById('database-content').innerHTML = "<p class='loading'>Errore nel leggere i dati dal file.</p>";
+            }
+        },
+        error: function(err) {
+            document.getElementById('loading-status').style.display = 'none';
+            document.getElementById('database-content').innerHTML = "<p class='loading'>Impossibile caricare il file Piante.csv. Verifica che sia presente su GitHub.</p>";
         }
     });
 
-    // Crea l'ID per agganciare le ancore del link
     function createId(name) {
+        if (!name) return "";
         return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').trim();
     }
 
@@ -76,18 +84,21 @@
         let htmlOutput = "";
         let groups = {};
 
-        data.forEach(row => {
-            if(row.length < 6) return;
+        data.forEach((row, index) => {
+            // Salta le righe vuote o troppo corte (devono avere almeno le colonne essenziali)
+            if(!row || row.length < 6) return;
 
+            // Recupero sicuro delle celle (se una è vuota mette un testo vuoto anziché bloccarsi)
             let formaBioSigla  = row[0] ? row[0].trim() : ""; // A
             let ordine         = row[3] ? row[3].trim() : ""; // D
             let famiglia       = row[4] ? row[4].trim() : ""; // E
-            let specieValida   = row[5] ? row[5].trim() : ""; // F (Nome principale)
-            let specieSinonimo = row[6] ? row[6].trim() : ""; // G (Sottospecie o Sinonimo)
-            let notaVedi       = row[7] ? row[7].trim() : ""; // H ("VEDI")
-            let nomeAttuale    = row[8] ? row[8].trim() : ""; // I (Nome attuale a cui rimanda)
+            let specieValida   = row[5] ? row[5].trim() : ""; // F
+            let specieSinonimo = row[6] ? row[6].trim() : ""; // G
+            let notaVedi       = row[7] ? row[7].trim() : ""; // H
+            let nomeAttuale    = row[8] ? row[8].trim() : ""; // I
             let nomiItaliani   = row[9] ? row[9].trim() : ""; // J
 
+            // Filtro principale sulla forma biologica
             if (formaBioSigla.includes(targetSigla)) {
                 
                 if(!ordine) ordine = "ORDINE NON SPECIFICATO";
@@ -96,7 +107,7 @@
                 if (!groups[ordine]) groups[ordine] = {};
                 if (!groups[ordine][famiglia]) groups[ordine][famiglia] = [];
 
-                // Criterio scientifico: se c'è "VEDI" nella colonna H, allora è un sinonimo
+                // Verifica se la colonna H contiene esplicitamente la parola "VEDI"
                 let esSinonimo = notaVedi.toLowerCase().includes('vedi');
 
                 groups[ordine][famiglia].push({
@@ -110,11 +121,13 @@
             }
         });
 
+        // Se non troviamo nessuna corrispondenza
         if (Object.keys(groups).length === 0) {
-            container.innerHTML = "<p class='loading'>Nessuna pianta trovata.</p>";
+            container.innerHTML = "<p class='loading'>Nessuna pianta trovata con la sigla '" + targetSigla + "'. Controlla le maiuscole/minuscole nel file.</p>";
             return;
         }
 
+        // Costruzione delle tabelle
         for (let ordine in groups) {
             for (let famiglia in groups[ordine]) {
                 htmlOutput += `
@@ -135,8 +148,8 @@
                     let rigaHtml = "";
                     let notaHtml = "";
 
-                    // CASO 1: È UN SINONIMO (C'è scritto "VEDI") -> Rosso, Corsivo, Cliccabile
                     if (pianta.isSinonimo) {
+                        // CASO 1: È UN SINONIMO ("VEDI" presente) -> Rosso, Corsivo, Cliccabile
                         let nomeSinonimo = pianta.sottospecie ? pianta.sottospecie : pianta.speciePrincipale;
                         rigaHtml = `<span class="synonym-species">${nomeSinonimo}</span>`;
                         
@@ -144,13 +157,13 @@
                             let ancoraTarget = createId(pianta.destinazioneLink);
                             let testoLink = `${pianta.testoVedi} ${pianta.destinazioneLink}`;
                             notaHtml = `<a href="#${ancoraTarget}" class="tax-link" onclick="highlightTarget('${ancoraTarget}')">🔗 ${testoLink}</a>`;
+                        } else {
+                            notaHtml = `<span class="tax-link" style="background:#f5f5f5; border-color:#ccc; color:#666;">${pianta.testoVedi}</span>`;
                         }
-                    } 
-                    // CASO 2: È UN NOME ATTUALE / VALIDO -> Blu, Grassetto (Anche se ha sottospecie compilate)
-                    else {
-                        // Se c'è una sottospecie valida uniamo i testi, altrimenti usiamo il principale
-                        let nomeCompletoAttuale = pianta.sottospecie ? `${pianta.speciePrincipale} (Sottosp: ${pianta.sottospecie})` : pianta.speciePrincipale;
-                        let idAncora = createId(pianta.speciePrincipale); // L'ancora punta sempre al nome base attuale
+                    } else {
+                        // CASO 2: NOME ATTUALE -> Blu, Grassetto
+                        let nomeCompletoAttuale = pianta.sottospecie ? `${pianta.speciePrincipale} ${pianta.sottospecie}` : pianta.speciePrincipale;
+                        let idAncora = createId(pianta.speciePrincipale);
                         
                         rigaHtml = `<span class="current-species" id="${idAncora}">${nomeCompletoAttuale}</span>`;
                     }
@@ -177,9 +190,11 @@
             let el = document.getElementById(id);
             if(el) {
                 let riga = el.closest('tr');
-                riga.classList.remove('target-highlight');
-                void riga.offsetWidth;
-                riga.classList.add('target-highlight');
+                if(riga) {
+                    riga.classList.remove('target-highlight');
+                    void riga.offsetWidth;
+                    riga.classList.add('target-highlight');
+                }
             }
         }, 50);
     }
