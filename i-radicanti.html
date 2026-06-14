@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idrofite Radicanti - Flora della Campania</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f2f6f3; color: #2b3a2f; padding: 30px 15px; }
+        .container { max-width: 1100px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .back-btn { display: inline-block; text-decoration: none; color: #2e6f40; font-weight: bold; margin-bottom: 20px; }
+        h1 { color: #1e4b2b; margin-bottom: 5px; }
+        .sub-title { color: #687e6e; font-style: italic; margin-bottom: 35px; }
+        .taxonomy-block { background: #fafdfb; border: 1px solid #cfe2d4; border-left: 5px solid #2e6f40; border-radius: 6px; padding: 15px 20px; margin-top: 25px; margin-bottom: 10px; }
+        .taxonomy-info { font-size: 1rem; color: #4e5e52; }
+        .taxonomy-info strong { color: #1e4b2b; text-transform: uppercase; }
+        .flora-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        .flora-table th { background: #edf4ef; text-align: left; padding: 12px; font-size: 0.9rem; color: #415647; border-bottom: 2px solid #cfe2d4; text-transform: uppercase; }
+        .flora-table td { padding: 16px 12px; border-bottom: 1px solid #edf4ef; font-size: 1.05rem; vertical-align: top; }
+        .genus-tag { font-size: 0.85rem; background: #e2ede5; color: #2e6f40; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 5px; }
+        .species-name { font-style: italic; font-weight: bold; color: #1e4b2b; font-size: 1.15rem; display: block; }
+        .tax-note { display: inline-block; font-size: 0.8rem; background: #eceff1; color: #546e7a; padding: 2px 6px; border-radius: 4px; margin-top: 6px; font-weight: 600; }
+        .tax-note.see { background: #ffebee; color: #c62828; }
+        .italian-names { color: #2c3e50; line-height: 1.5; }
+        .loading { font-size: 1.2rem; color: #687e6e; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">⬅ Torna alla Home</a>
+    
+    <h1>Idrofite radicanti (I rad)</h1>
+    <p class="sub-title">Piante acquatiche ancorate al fondo per mezzo di radici</p>
+
+    <div id="loading-status" class="loading">Caricamento delle piante in corso...</div>
+    <div id="database-content"></div>
+</div>
+
+<script>
+    // Diciamo alla pagina di cercare solo le piante con la sigla "I rad"
+    const targetSigla = "I rad";
+
+    Papa.parse("flora.csv", {
+        download: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            document.getElementById('loading-status').style.display = 'none';
+            renderTable(results.data);
+        }
+    });
+
+    function renderTable(data) {
+        const container = document.getElementById('database-content');
+        let htmlOutput = "";
+        let groups = {};
+
+        data.forEach(row => {
+            if(row.length < 7) return;
+
+            // Leggiamo le colonne del tuo Excel (0 è la prima, 1 la seconda, ecc.)
+            let siglaFormaBio = row[0] ? row[0].trim() : "";
+            let ordine = row[3] ? row[3].trim() : "";
+            let famiglia = row[4] ? row[4].trim() : "";
+            let genere = row[5] ? row[5].trim() : "";
+            let specieCompleta = row[6] ? row[6].trim() : "";
+            let notaTassonomica = row[7] ? row[7].trim() : "";
+            let nomiItaliani = row[8] ? row[8].trim() : "";
+
+            // Se la riga contiene la sigla "I rad", la teniamo
+            if (siglaFormaBio.includes(targetSigla)) {
+                if(!ordine) ordine = "-";
+                if(!famiglia) famiglia = "-";
+
+                if (!groups[ordine]) groups[ordine] = {};
+                if (!groups[ordine][famiglia]) groups[ordine][famiglia] = [];
+
+                groups[ordine][famiglia].push({
+                    genere: genere,
+                    specie: specieCompleta,
+                    nota: notaTassonomica,
+                    nomi: nomiItaliani
+                });
+            }
+        });
+
+        // Generiamo i blocchi sulla pagina
+        for (let ordine in groups) {
+            for (let famiglia in groups[ordine]) {
+                htmlOutput += `
+                    <div class="taxonomy-block">
+                        <div class="taxonomy-info">Ordine: <strong>${ordine}</strong> &nbsp;|&nbsp; Famiglia: <strong>${famiglia}</strong></div>
+                    </div>
+                    <table class="flora-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%;">Specie</th>
+                                <th style="width: 50%;">Nomi Italiani / Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                groups[ordine][famiglia].forEach(pianta => {
+                    let isSeeNote = pianta.nota.toLowerCase().includes('vedi');
+                    let tagClass = isSeeNote ? 'tax-note see' : 'tax-note';
+
+                    htmlOutput += `
+                        <tr>
+                            <td>
+                                <span class="genus-tag">Genere: ${pianta.genere}</span>
+                                <span class="species-name">${pianta.specie}</span>
+                                <span class="${tagClass}">${pianta.nota}</span>
+                            </td>
+                            <td class="italian-names">${pianta.nomi}</td>
+                        </tr>
+                    `;
+                });
+
+                htmlOutput += `</tbody></table>`;
+            }
+        }
+        container.innerHTML = htmlOutput;
+    }
+</script>
+
+</body>
+</html>
