@@ -24,7 +24,7 @@
             margin: 0 auto; 
         }
 
-        /* Il grande riquadro del titolo con effetto moderno */
+        /* Il grande riquadro del titolo */
         .header-box {
             background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
             color: white;
@@ -32,10 +32,8 @@
             border-radius: 20px;
             text-align: center;
             box-shadow: 0 15px 30px rgba(27, 67, 50, 0.2);
-            margin-bottom: 50px;
+            margin-bottom: 30px;
             border: 3px solid #b7e4c7;
-            position: relative;
-            overflow: hidden;
         }
 
         .header-box h1 {
@@ -60,35 +58,36 @@
         .macro-area {
             background: white;
             border-radius: 20px;
-            margin-bottom: 45px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
             overflow: hidden;
             border: 1px solid #e2e8f0;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .macro-area:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-        }
-
-        /* Banner con Immagini di Sfondo Naturalistiche e suggestive */
+        /* Banner con Immagini di Sfondo - Cliccabile */
         .macro-banner {
-            height: 220px;
+            height: 180px;
             background-size: cover;
             background-position: center;
             position: relative;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 0 40px;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
         }
 
-        /* Sfondi Immagine HD stabili e spettacolari */
+        .macro-banner:hover {
+            opacity: 0.95;
+        }
+
+        /* Sfondi Immagine HD stabili */
         .bg-g { background-image: url('https://images.unsplash.com/photo-1550950158-d0d960dff51b?auto=format&fit=crop&w=1200&q=80'); }
         .bg-p { background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1200&q=80'); }
         .bg-ch { background-image: url('https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1200&q=80'); }
 
-        /* Sfumatura scura per far risaltare magnificamente il testo bianco */
+        /* Sfumatura scura per la leggibilità */
         .macro-banner::before {
             content: '';
             position: absolute;
@@ -101,32 +100,51 @@
             position: relative;
             z-index: 2;
             color: white;
-            max-width: 700px;
+            max-width: 800px;
         }
 
         .macro-text h2 {
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
+            margin-bottom: 6px;
         }
 
         .macro-text p {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             opacity: 0.9;
             font-style: italic;
         }
 
-        /* Griglia dei pulsanti sottostanti */
+        /* Icona freccia per indicare l'apertura */
+        .toggle-icon {
+            position: relative;
+            z-index: 2;
+            color: white;
+            font-size: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* Quando la sezione è aperta, la freccia ruota */
+        .macro-area.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Griglia dei pulsanti sottostanti - NASCOSTA DI DEFAULT */
         .grid-buttons {
-            display: grid;
+            display: none;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 25px;
             padding: 40px;
             background: #ffffff;
+            border-top: 1px solid #e2e8f0;
         }
 
-        /* Stile dei singoli pulsanti/card cliccabili */
+        /* Mostra la griglia solo quando la macro-area ha la classe .active */
+        .macro-area.active .grid-buttons {
+            display: grid;
+        }
+
+        /* Stile delle card interne cliccabili */
         .card-link {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -138,13 +156,11 @@
             flex-direction: column;
             justify-content: space-between;
             transition: all 0.2s ease;
-            position: relative;
         }
 
         .card-link h3 {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             margin-bottom: 8px;
-            transition: color 0.2s ease;
         }
 
         .card-link p {
@@ -154,7 +170,7 @@
             line-height: 1.5;
         }
 
-        /* Effetti hover personalizzati per Area Botanica */
+        /* Effetti grafici per area botanica */
         .area-g .card-link { border-left: 5px solid #2d6a4f; }
         .area-g .card-link h3 { color: #1b4332; }
         .area-g .card-link:hover { background: #f0f7f4; border-color: #2d6a4f; transform: scale(1.02); }
@@ -168,10 +184,8 @@
         .area-ch .card-link:hover { background: #fffbeb; border-color: #d97706; transform: scale(1.02); }
 
         .action-text {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            display: flex;
-            align-items: center;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -181,9 +195,9 @@
 
         @media (max-width: 768px) {
             .grid-buttons { grid-template-columns: 1fr; padding: 20px; }
-            .header-box h1 { font-size: 2rem; }
-            .macro-banner { height: 180px; padding: 0 20px; }
-            .macro-text h2 { font-size: 1.8rem; }
+            .header-box h1 { font-size: 1.8rem; }
+            .macro-banner { height: 150px; padding: 0 20px; }
+            .macro-text h2 { font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -191,17 +205,20 @@
 
 <div class="container">
 
+    <!-- Il Grande Riquadro del Titolo -->
     <div class="header-box">
         <h1>Flora della Campania</h1>
         <p>Archivio Scientifico ed Esplorativo Digitale delle Specie Vegetali Classificate per Forme Biologiche</p>
     </div>
 
+    <!-- ================= SEZIONE GEOFITE ================= -->
     <div class="macro-area area-g">
-        <div class="macro-banner bg-g">
+        <div class="macro-banner bg-g" onclick="toggleSection(this)">
             <div class="macro-text">
                 <h2>Geofite (G)</h2>
-                <p>Piante erbacee perenni dotate di organi sotterranei come bulbi, rizomi o tuberi, atti a superare i periodi avversi.</p>
+                <p>Piante erbacee perenni dotate di organi sotterranei come bulbi, rizomi o tuberi.</p>
             </div>
+            <div class="toggle-icon">▼</div>
         </div>
         <div class="grid-buttons">
             <a href="g-bulbose.html" class="card-link">
@@ -242,12 +259,14 @@
         </div>
     </div>
 
+    <!-- ================= SEZIONE FANEROFITE ================= -->
     <div class="macro-area area-p">
-        <div class="macro-banner bg-p">
+        <div class="macro-banner bg-p" onclick="toggleSection(this)">
             <div class="macro-text">
                 <h2>Fanerofite (P)</h2>
                 <p>Alberi, arbusti e liane legnose le cui gemme svernanti si trovano a un'altezza superiore ai 30 centimetri dal suolo.</p>
             </div>
+            <div class="toggle-icon">▼</div>
         </div>
         <div class="grid-buttons">
             <a href="F-arboree.html" class="card-link">
@@ -302,12 +321,14 @@
         </div>
     </div>
 
+    <!-- ================= SEZIONE CAMEFITE ================= -->
     <div class="macro-area area-ch">
-        <div class="macro-banner bg-ch">
+        <div class="macro-banner bg-ch" onclick="toggleSection(this)">
             <div class="macro-text">
                 <h2>Camefite (Ch)</h2>
                 <p>Piante perenni con fusti legnosi solo alla base, le cui gemme svernanti rimangono tra i 5 e i 30 centimetri dal suolo.</p>
             </div>
+            <div class="toggle-icon">▼</div>
         </div>
         <div class="grid-buttons">
             <a href="Ch-fruticose.html" class="card-link">
@@ -356,6 +377,16 @@
     </div>
 
 </div>
+
+<script>
+    function toggleSection(bannerElement) {
+        // Recupera il blocco .macro-area che contiene questo banner
+        const areaBlock = bannerElement.parentElement;
+        
+        // Alterna la classe .active per mostrare/nascondere la griglia interna
+        areaBlock.classList.toggle('active');
+    }
+</script>
 
 </body>
 </html>
