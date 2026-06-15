@@ -7,7 +7,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; color: #1e293b; padding: 40px 20px; line-height: 1.6; }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1400px; margin: 0 auto; }
         
         .header-box {
             background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
@@ -17,57 +17,64 @@
         .header-box h1 { font-size: 2.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; text-transform: uppercase; }
         .header-box p { font-size: 1.2rem; font-style: italic; opacity: 0.95; max-width: 800px; margin: 0 auto; }
 
-        /* LA GRIGLIA PRINCIPALE: Dispone i 7 banner in file affiancate */
+        /* GRIGLIA SIMMETRICA: Forza 4 colonne su schermi grandi */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
         }
 
         .macro-area { background: white; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.04); overflow: hidden; border: 1px solid #e2e8f0; height: max-content; }
         
-        /* Banner con Immagine di Sfondo */
-        .macro-banner { height: 160px; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; cursor: pointer; }
-        .macro-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, rgba(15,23,42,0.85) 0%, rgba(15,23,42,0.4) 100%); z-index: 1; }
+        /* Banner con Immagine di Sfondo più compatto per stare su 4 colonne */
+        .macro-banner { height: 180px; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; cursor: pointer; }
+        .macro-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, rgba(15,23,42,0.75) 0%, rgba(15,23,42,0.9) 100%); z-index: 1; }
         
-        .macro-text { position: relative; z-index: 2; color: white; padding-right: 15px; }
-        .macro-text h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
-        .macro-text p { font-size: 0.95rem; opacity: 0.9; font-style: italic; line-height: 1.4; }
-        .toggle-icon { position: relative; z-index: 2; color: white; font-size: 1.5rem; transition: transform 0.3s; }
+        .macro-text { position: relative; z-index: 2; color: white; }
+        .macro-text h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 4px; }
+        .macro-text p { font-size: 0.85rem; opacity: 0.9; font-style: italic; line-height: 1.3; }
+        .toggle-icon { position: relative; z-index: 2; color: white; font-size: 1.2rem; transition: transform 0.3s; margin-left: 5px; }
         .macro-area.active .toggle-icon { transform: rotate(180deg); }
 
-        /* Griglie dei pulsanti interni (nascoste di default) */
-        .grid-buttons { display: none; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px; background: #ffffff; border-top: 1px solid #e2e8f0; }
+        /* Griglie dei pulsanti interni (verticali e compatte) */
+        .grid-buttons { display: none; grid-template-columns: 1fr; gap: 10px; padding: 15px; background: #ffffff; border-top: 1px solid #e2e8f0; }
         .macro-area.active .grid-buttons { display: grid; }
 
         /* Categoria vuota */
-        .empty-status { padding: 25px; color: #64748b; font-style: italic; font-size: 0.95rem; border-top: 1px solid #e2e8f0; display: none; }
+        .empty-status { padding: 15px; color: #64748b; font-style: italic; font-size: 0.85rem; border-top: 1px solid #e2e8f0; display: none; }
         .macro-area.active .empty-status { display: block; }
 
-        .card-link { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s; }
-        .card-link h3 { font-size: 1.1rem; margin-bottom: 4px; }
-        .card-link p { font-size: 0.85rem; color: #64748b; margin-bottom: 10px; line-height: 1.4; }
+        .card-link { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s; }
+        .card-link h3 { font-size: 1rem; margin-bottom: 2px; }
+        .card-link p { font-size: 0.8rem; color: #64748b; margin-bottom: 6px; line-height: 1.3; }
         
         /* Temi cromatici */
         .area-g .card-link { border-left: 4px solid #2d6a4f; } .area-g .card-link h3 { color: #1b4332; }
         .area-p .card-link { border-left: 4px solid #0284c7; } .area-p .card-link h3 { color: #0369a1; }
         .area-ch .card-link { border-left: 4px solid #d97706; } .area-ch .card-link h3 { color: #b45309; }
-        .action-text { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+        .action-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
         .area-g .action-text { color: #2d6a4f; } .area-p .action-text { color: #0284c7; } .area-ch .action-text { color: #d97706; }
 
-        /* Sfondi Immagini */
-        .bg-g { background-image: url('https://images.unsplash.com/photo-1550950158-d0d960dff51b?auto=format&fit=crop&w=1200&q=80'); }
-        .bg-p { background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1200&q=80'); }
-        .bg-ch { background-image: url('https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1200&q=80'); }
-        .bg-h { background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=80'); }
-        .bg-t { background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1200&q=80'); }
-        .bg-i { background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80'); }
-        .bg-he { background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80'); }
+        /* Stile speciale per l'ottavo blocco (Elenchi Alfabetici) */
+        .area-indexes { border: 2px dashed #94a3b8; background: #f1f5f9; }
+        .indexes-banner { background: linear-gradient(135deg, #334155 0%, #1e293b 100%); cursor: default !important; }
+        .indexes-grid { display: grid; grid-template-columns: 1fr; gap: 10px; padding: 15px; }
+        .card-index { border-left: 4px solid #64748b; }
+        .card-index h3 { color: #334155 !important; }
+        .card-index .action-text { color: #64748b; }
 
-        @media (max-width: 1024px) {
-            .dashboard-grid { grid-template-columns: 1fr; gap: 20px; }
-            .grid-buttons { grid-template-columns: 1fr; }
-        }
+        /* Sfondi Immagini */
+        .bg-g { background-image: url('https://images.unsplash.com/photo-1550950158-d0d960dff51b?auto=format&fit=crop&w=600&q=80'); }
+        .bg-p { background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=600&q=80'); }
+        .bg-ch { background-image: url('https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=600&q=80'); }
+        .bg-h { background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=600&q=80'); }
+        .bg-t { background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=600&q=80'); }
+        .bg-i { background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80'); }
+        .bg-he { background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80'); }
+
+        /* Responsive per Tablet e Cellulari */
+        @media (max-width: 1200px) { .dashboard-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 650px) { .dashboard-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -79,13 +86,13 @@
         <p>Archivio Scientifico ed Esplorativo Digitale delle Specie Vegetali Classificate per Forme Biologiche</p>
     </div>
 
-    <!-- GRIGLIA CONTENITORE -->
+    <!-- GRIGLIA CONTENITORE PRINCIPALE (4 per fila) -->
     <div class="dashboard-grid">
 
-        <!-- 1. GEOFITE -->
+        <!-- FILA 1 - BLOCCO 1: GEOFITE -->
         <div class="macro-area area-g">
             <div class="macro-banner bg-g" onclick="toggleSection(this)">
-                <div class="macro-text"><h2>Geofite (G)</h2><p>Piante erbacee perenni dotate di organi sotterranei come bulbi, rizomi o tuberi.</p></div>
+                <div class="macro-text"><h2>Geofite (G)</h2><p>Organi sotterranei (bulbi, rizomi, tuberi).</p></div>
                 <div class="toggle-icon">▼</div>
             </div>
             <div class="grid-buttons">
@@ -97,10 +104,10 @@
             </div>
         </div>
 
-        <!-- 2. FANEROFITE -->
+        <!-- FILA 1 - BLOCCO 2: FANEROFITE -->
         <div class="macro-area area-p">
             <div class="macro-banner bg-p" onclick="toggleSection(this)">
-                <div class="macro-text"><h2>Fanerofite (P)</h2><p>Alberi, arbusti e liane legnose con gemme svernanti poste oltre i 30 cm dal suolo.</p></div>
+                <div class="macro-text"><h2>Fanerofite (P)</h2><p>Alberi e arbusti con gemme oltre i 30 cm.</p></div>
                 <div class="toggle-icon">▼</div>
             </div>
             <div class="grid-buttons">
@@ -114,10 +121,10 @@
             </div>
         </div>
 
-        <!-- 3. CAMEFITE -->
+        <!-- FILA 1 - BLOCCO 3: CAMEFITE -->
         <div class="macro-area area-ch">
             <div class="macro-banner bg-ch" onclick="toggleSection(this)">
-                <div class="macro-text"><h2>Camefite (Ch)</h2><p>Piante perenni, legnose alla base, con gemme poste tra i 5 e i 30 cm dal suolo.</p></div>
+                <div class="macro-text"><h2>Camefite (Ch)</h2><p>Legnose alla base, gemme tra 5 e 30 cm.</p></div>
                 <div class="toggle-icon">▼</div>
             </div>
             <div class="grid-buttons">
@@ -130,40 +137,66 @@
             </div>
         </div>
 
-        <!-- 4. EMICRITTOFITE -->
+        <!-- FILA 1 - BLOCCO 4: EMICRITTOFITE -->
         <div class="macro-area">
             <div class="macro-banner bg-h" onclick="toggleSection(this)">
-                <div class="macro-text"><h2>Emicrittofite (H)</h2><p>Piante perenni erbacee con gemme svernanti al livello del suolo.</p></div>
+                <div class="macro-text"><h2>Emicrittofite (H)</h2><p>Erbacee perenni con gemme al livello del suolo.</p></div>
                 <div class="toggle-icon">▼</div>
             </div>
             <div class="empty-status">Categoria in corso di popolamento...</div>
         </div>
 
-        <!-- 5. TEROFITE -->
+        <!-- FILA 2 - BLOCCO 5: TEROFITE -->
         <div class="macro-area">
             <div class="macro-banner bg-t" onclick="toggleSection(this)">
-                <div class="macro-text"><h2>Terofite (T)</h2><p>Piante annuali che superano la stagione avversa sotto forma di seme.</p></div>
+                <div class="macro-text"><h2>Terofite (T)</h2><p>Piante annuali che superano l'inverno come seme.</p></div>
                 <div class="toggle-icon">▼</div>
             </div>
             <div class="empty-status">Categoria in corso di popolamento...</div>
         </div>
 
-        <!-- 6. IDROFITE -->
+        <!-- FILA 2 - BLOCCO 6: IDROFITE -->
         <div class="macro-area">
             <div class="macro-banner bg-i" onclick="toggleSection(this)">
-                <div class="macro-text"><h2>Idrofite (I)</h2><p>Piante acquatiche perenni con gemme sommerse o fluttuanti.</p></div>
+                <div class="macro-text"><h2>Idrofite (I)</h2><p>Piante acquatiche con gemme sommerse.</p></div>
                 <div class="toggle-icon">▼</div>
             </div>
             <div class="empty-status">Categoria in corso di popolamento...</div>
         </div>
 
-        <!-- 7. ELOFITE -->
+        <!-- FILA 2 - BLOCCO 7: ELOFITE -->
         <div class="macro-area">
             <div class="macro-banner bg-he" onclick="toggleSection(this)">
-                <div class="macro-text"><h2>Elofite (He)</h2><p>Piante d'ambiente paludoso con base sommersa e fusto aereo.</p></div>
+                <div class="macro-text"><h2>Elofite (He)</h2><p>Piante palustri con base sommersa e fusto aereo.</p></div>
                 <div class="toggle-icon">▼</div>
             </div>
             <div class="empty-status">Categoria in corso di popolamento...</div>
+        </div>
+
+        <!-- FILA 2 - BLOCCO 8: INDICI ALFABETICI COMPLETI (Chiude la griglia senza spazi vuoti!) -->
+        <div class="macro-area area-indexes">
+            <div class="macro-banner indexes-banner">
+                <div class="macro-text">
+                    <h2>Indici Generali</h2>
+                    <p>Elenchi alfabetici completi di tutte le specie della Campania.</p>
+                </div>
+            </div>
+            <div class="indexes-grid">
+                <a href="indice-scientifico.html" class="card-link card-index">
+                    <div>
+                        <h3>Nomi Scientifici</h3>
+                        <p>Elenco alfabetico globale basato sulla nomenclatura botanica.</p>
+                    </div>
+                    <span class="action-text">Apri Indice ➔</span>
+                </a>
+                <a href="indice-italiano.html" class="card-link card-index">
+                    <div>
+                        <h3>Nomi Italiani</h3>
+                        <p>Elenco alfabetico globale basato sui nomi comuni e volgari.</p>
+                    </div>
+                    <span class="action-text">Apri Indice ➔</span>
+                </a>
+            </div>
         </div>
 
     </div>
