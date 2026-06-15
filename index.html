@@ -5,385 +5,150 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flora della Campania - Dashboard Home</title>
     <style>
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; color: #1e293b; padding: 50px 20px; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; }
         
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: #eef2f5; 
-            color: #1e293b; 
-            padding: 50px 20px;
-            line-height: 1.6;
-        }
-
-        .container { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-        }
-
-        /* Il grande riquadro del titolo */
         .header-box {
             background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
-            color: white;
-            padding: 50px 30px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 15px 30px rgba(27, 67, 50, 0.2);
-            margin-bottom: 30px;
-            border: 3px solid #b7e4c7;
+            color: white; padding: 50px 30px; border-radius: 20px; text-align: center;
+            box-shadow: 0 15px 30px rgba(27, 67, 50, 0.2); margin-bottom: 30px; border: 3px solid #b7e4c7;
         }
+        .header-box h1 { font-size: 3rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 15px; text-transform: uppercase; }
+        .header-box p { font-size: 1.3rem; font-style: italic; opacity: 0.95; max-width: 800px; margin: 0 auto; }
 
-        .header-box h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
+        .macro-area { background: white; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.04); overflow: hidden; border: 1px solid #e2e8f0; }
+        .macro-banner { height: 150px; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; cursor: pointer; }
+        .macro-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, rgba(15,23,42,0.85) 0%, rgba(15,23,42,0.4) 100%); z-index: 1; }
+        
+        .macro-text { position: relative; z-index: 2; color: white; max-width: 800px; }
+        .macro-text h2 { font-size: 2rem; font-weight: 700; margin-bottom: 4px; }
+        .macro-text p { font-size: 1rem; opacity: 0.9; font-style: italic; }
+        .toggle-icon { position: relative; z-index: 2; color: white; font-size: 1.8rem; transition: transform 0.3s; }
+        .macro-area.active .toggle-icon { transform: rotate(180deg); }
 
-        .header-box p {
-            font-size: 1.3rem;
-            font-style: italic;
-            opacity: 0.95;
-            max-width: 800px;
-            margin: 0 auto;
-            font-weight: 300;
-        }
+        /* Griglie dei pulsanti (nascoste di default) */
+        .grid-buttons { display: none; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; padding: 40px; background: #ffffff; border-top: 1px solid #e2e8f0; }
+        .macro-area.active .grid-buttons { display: grid; }
 
-        /* Contenitore principale delle Macro Aree */
-        .macro-area {
-            background: white;
-            border-radius: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-        }
+        .card-link { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s; }
+        .card-link h3 { font-size: 1.2rem; margin-bottom: 8px; }
+        .card-link p { font-size: 0.9rem; color: #64748b; margin-bottom: 15px; }
+        
+        /* Temi cromatici */
+        .area-g .card-link { border-left: 5px solid #2d6a4f; } .area-g .card-link h3 { color: #1b4332; }
+        .area-p .card-link { border-left: 5px solid #0284c7; } .area-p .card-link h3 { color: #0369a1; }
+        .area-ch .card-link { border-left: 5px solid #d97706; } .area-ch .card-link h3 { color: #b45309; }
+        .action-text { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
 
-        /* Banner con Immagini di Sfondo - Cliccabile */
-        .macro-banner {
-            height: 180px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-            cursor: pointer;
-            transition: opacity 0.2s ease;
-        }
-
-        .macro-banner:hover {
-            opacity: 0.95;
-        }
-
-        /* Sfondi Immagine HD stabili */
+        /* Placeholder sfondi temporanei per i 7 banner */
         .bg-g { background-image: url('https://images.unsplash.com/photo-1550950158-d0d960dff51b?auto=format&fit=crop&w=1200&q=80'); }
         .bg-p { background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1200&q=80'); }
         .bg-ch { background-image: url('https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1200&q=80'); }
-
-        /* Sfumatura scura per la leggibilità */
-        .macro-banner::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(90deg, rgba(15,23,42,0.85) 0%, rgba(15,23,42,0.4) 100%);
-            z-index: 1;
-        }
-
-        .macro-text {
-            position: relative;
-            z-index: 2;
-            color: white;
-            max-width: 800px;
-        }
-
-        .macro-text h2 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .macro-text p {
-            font-size: 1.05rem;
-            opacity: 0.9;
-            font-style: italic;
-        }
-
-        /* Icona freccia per indicare l'apertura */
-        .toggle-icon {
-            position: relative;
-            z-index: 2;
-            color: white;
-            font-size: 2rem;
-            transition: transform 0.3s ease;
-        }
-
-        /* Quando la sezione è aperta, la freccia ruota */
-        .macro-area.active .toggle-icon {
-            transform: rotate(180deg);
-        }
-
-        /* Griglia dei pulsanti sottostanti - NASCOSTA DI DEFAULT */
-        .grid-buttons {
-            display: none;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            padding: 40px;
-            background: #ffffff;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        /* Mostra la griglia solo quando la macro-area ha la classe .active */
-        .macro-area.active .grid-buttons {
-            display: grid;
-        }
-
-        /* Stile delle card interne cliccabili */
-        .card-link {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 14px;
-            padding: 24px;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: all 0.2s ease;
-        }
-
-        .card-link h3 {
-            font-size: 1.25rem;
-            margin-bottom: 8px;
-        }
-
-        .card-link p {
-            font-size: 0.95rem;
-            color: #64748b;
-            margin-bottom: 18px;
-            line-height: 1.5;
-        }
-
-        /* Effetti grafici per area botanica */
-        .area-g .card-link { border-left: 5px solid #2d6a4f; }
-        .area-g .card-link h3 { color: #1b4332; }
-        .area-g .card-link:hover { background: #f0f7f4; border-color: #2d6a4f; transform: scale(1.02); }
-
-        .area-p .card-link { border-left: 5px solid #0284c7; }
-        .area-p .card-link h3 { color: #0369a1; }
-        .area-p .card-link:hover { background: #f0f9ff; border-color: #0284c7; transform: scale(1.02); }
-
-        .area-ch .card-link { border-left: 5px solid #d97706; }
-        .area-ch .card-link h3 { color: #b45309; }
-        .area-ch .card-link:hover { background: #fffbeb; border-color: #d97706; transform: scale(1.02); }
-
-        .action-text {
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .area-g .action-text { color: #2d6a4f; }
-        .area-p .action-text { color: #0284c7; }
-        .area-ch .action-text { color: #d97706; }
-
-        @media (max-width: 768px) {
-            .grid-buttons { grid-template-columns: 1fr; padding: 20px; }
-            .header-box h1 { font-size: 1.8rem; }
-            .macro-banner { height: 150px; padding: 0 20px; }
-            .macro-text h2 { font-size: 1.5rem; }
-        }
+        .bg-h { background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=80'); }
+        .bg-t { background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1200&q=80'); }
+        .bg-i { background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80'); }
+        .bg-he { background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80'); }
     </style>
 </head>
 <body>
 
 <div class="container">
 
-    <!-- Il Grande Riquadro del Titolo -->
     <div class="header-box">
         <h1>Flora della Campania</h1>
         <p>Archivio Scientifico ed Esplorativo Digitale delle Specie Vegetali Classificate per Forme Biologiche</p>
     </div>
 
-    <!-- ================= SEZIONE GEOFITE ================= -->
+    <!-- 1. GEOFITE -->
     <div class="macro-area area-g">
         <div class="macro-banner bg-g" onclick="toggleSection(this)">
-            <div class="macro-text">
-                <h2>Geofite (G)</h2>
-                <p>Piante erbacee perenni dotate di organi sotterranei come bulbi, rizomi o tuberi.</p>
-            </div>
+            <div class="macro-text"><h2>Geofite (G)</h2><p>Piante erbacee perenni dotate di organi sotterranei come bulbi, rizomi o tuberi.</p></div>
             <div class="toggle-icon">▼</div>
         </div>
         <div class="grid-buttons">
-            <a href="g-bulbose.html" class="card-link">
-                <div>
-                    <h3>Geofite bulbose (G bulb)</h3>
-                    <p>Piante dotate di bulbi protettivi sotterranei (es. Narcisi, Crochi, Sgorgi).</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="g-rizomatose.html" class="card-link">
-                <div>
-                    <h3>Geofite rizomatose (G rhiz)</h3>
-                    <p>Specie provviste di rizoma, un fusto sotterraneo allungato con funzioni di riserva.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="g-parassite.html" class="card-link">
-                <div>
-                    <h3>Geofite parassite (G par)</h3>
-                    <p>Piante prive di clorofilla che traggono il loro nutrimento a spese delle radici di altri alberi o arbusti.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="g-radicogemmate.html" class="card-link">
-                <div>
-                    <h3>Geofite radicogemmate (G rad)</h3>
-                    <p>Piante perenni che si riproducono ed espandono mediante gemme avventizie collocate sulle radici.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="g-tuberose.html" class="card-link">
-                <div>
-                    <h3>Geofite tuberose (G tub)</h3>
-                    <p>Specie provviste di radici o porzioni di fusto modificate in tuberi carnosi.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
+            <a href="g-bulbose.html" class="card-link"><div><h3>Geofite bulbose (G bulb)</h3><p>Piante dotate di bulbi protettivi sotterranei.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="g-rizomatose.html" class="card-link"><div><h3>Geofite rizomatose (G rhiz)</h3><p>Specie provviste di rizoma con funzioni di riserva.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="g-parassite.html" class="card-link"><div><h3>Geofite parassite (G par)</h3><p>Piante prive di clorofilla che traggono nutrimento da ospiti.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="g-radicogemmate.html" class="card-link"><div><h3>Geofite radicogemmate (G rad)</h3><p>Piante perenni che si espandono mediante gemme sulle radici.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="g-tuberose.html" class="card-link"><div><h3>Geofite tuberose (G tub)</h3><p>Specie provviste di radici o fusti modificati in tuberi.</p></div><span class="action-text">Consulta Specie ➔</span></a>
         </div>
     </div>
 
-    <!-- ================= SEZIONE FANEROFITE ================= -->
+    <!-- 2. FANEROFITE -->
     <div class="macro-area area-p">
         <div class="macro-banner bg-p" onclick="toggleSection(this)">
-            <div class="macro-text">
-                <h2>Fanerofite (P)</h2>
-                <p>Alberi, arbusti e liane legnose le cui gemme svernanti si trovano a un'altezza superiore ai 30 centimetri dal suolo.</p>
-            </div>
+            <div class="macro-text"><h2>Fanerofite (P)</h2><p>Alberi, arbusti e liane legnose le cui gemme svernanti si trovano oltre i 30 cm dal suolo.</p></div>
             <div class="toggle-icon">▼</div>
         </div>
         <div class="grid-buttons">
-            <a href="F-arboree.html" class="card-link">
-                <div>
-                    <h3>Fanerofite arboree (P scap)</h3>
-                    <p>Alberi a portamento eretto con un fusto legnoso principale (scapo) ben definito.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="F-cespitose.html" class="card-link">
-                <div>
-                    <h3>Fanerofite cespitose (P caesp)</h3>
-                    <p>Arbusti e cespugli legnosi caratterizzati da vistose ramificazioni fitte fin dalla base.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="F-lianose.html" class="card-link">
-                <div>
-                    <h3>Fanerofite lianose (P lian)</h3>
-                    <p>Piante rampicanti con fusti legnosi allungati che necessitano di un sostegno fisico esterno.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="F-reptanti.html" class="card-link">
-                <div>
-                    <h3>Fanerofite reptanti (P rept)</h3>
-                    <p>Piante legnose perenni a portamento prostrato o strisciante sulla superficie del terreno.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="F-succulenti.html" class="card-link">
-                <div>
-                    <h3>Fanerofite succulenti (P succ)</h3>
-                    <p>Piante legnose stanziali con macro-tessuti specializzati nell'accumulo e riserva d'acqua.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="F-epifite.html" class="card-link">
-                <div>
-                    <h3>Fanerofite epifite (P ef)</h3>
-                    <p>Specie legnose che vivono ancorandosi ed accrescendosi sui tronchi o rami di altre piante.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="F-fruticose.html" class="card-link">
-                <div>
-                    <h3>Fanerofite fruticose (P frut)</h3>
-                    <p>Piccoli arbusti legnosi di taglia ridotta e fittamente ramificati.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
+            <a href="F-arboree.html" class="card-link"><div><h3>Fanerofite arboree (P scap)</h3><p>Alberi a portamento eretto con fusto principale definito.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="F-cespitose.html" class="card-link"><div><h3>Fanerofite cespitose (P caesp)</h3><p>Arbusti legnosi con vistose ramificazioni fitte fin dalla base.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="F-lianose.html" class="card-link"><div><h3>Fanerofite lianose (P lian)</h3><p>Piante rampicanti con fusti legnosi allungati.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="F-reptanti.html" class="card-link"><div><h3>Fanerofite reptanti (P rept)</h3><p>Piante legnose perenni a portamento prostrato o strisciante.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="F-succulenti.html" class="card-link"><div><h3>Fanerofite succulenti (P succ)</h3><p>Piante legnose con tessuti specializzati nell'accumulo d'acqua.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="F-epifite.html" class="card-link"><div><h3>Fanerofite epifite (P ef)</h3><p>Specie legnose che vivono ancorandosi sui tronchi di altre piante.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="F-fruticose.html" class="card-link"><div><h3>Fanerofite fruticose (P frut)</h3><p>Piccoli arbusti legnosi di taglia ridotta.</p></div><span class="action-text">Consulta Specie ➔</span></a>
         </div>
     </div>
 
-    <!-- ================= SEZIONE CAMEFITE ================= -->
+    <!-- 3. CAMEFITE -->
     <div class="macro-area area-ch">
         <div class="macro-banner bg-ch" onclick="toggleSection(this)">
-            <div class="macro-text">
-                <h2>Camefite (Ch)</h2>
-                <p>Piante perenni con fusti legnosi solo alla base, le cui gemme svernanti rimangono tra i 5 e i 30 centimetri dal suolo.</p>
-            </div>
+            <div class="macro-text"><h2>Camefite (Ch)</h2><p>Piante perenni con fusti legnosi solo alla base, le cui gemme svernanti rimangono tra i 5 e i 30 cm dal suolo.</p></div>
             <div class="toggle-icon">▼</div>
         </div>
         <div class="grid-buttons">
-            <a href="Ch-fruticose.html" class="card-link">
-                <div>
-                    <h3>Camefite fruticose (Ch frut)</h3>
-                    <p>Piccoli cespugli legnosi ramificati fin dalla base del terreno.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="Ch-pulvinate.html" class="card-link">
-                <div>
-                    <h3>Camefite pulvinate (Ch pulv)</h3>
-                    <p>Piante con accrescimento denso e compatto a forma di cuscinetto semisferico.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="Ch-reptanti.html" class="card-link">
-                <div>
-                    <h3>Camefite reptanti (Ch rept)</h3>
-                    <p>Sottorbuscelli caratterizzati da fusti striscianti adagiati sul suolo.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="Ch-succulenti.html" class="card-link">
-                <div>
-                    <h3>Camefite succulenti (Ch succ)</h3>
-                    <p>Piante basse con fusti o foglie carnose adibite alla ritenzione idrica.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="Ch-suffruticose.html" class="card-link">
-                <div>
-                    <h3>Camefite suffruticose (Ch suffr)</h3>
-                    <p>Fusti legnosi persistenti solo in basso e rami superiori erbacei rinnovati annualmente.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
-            <a href="Ch-sarmentose.html" class="card-link">
-                <div>
-                    <h3>Camefite sarmentose (Ch sarment)</h3>
-                    <p>Cespugli bassi dotati di rami allungati, flessibili e appoggiati al terreno.</p>
-                </div>
-                <span class="action-text">Consulta Specie ➔</span>
-            </a>
+            <a href="Ch-fruticose.html" class="card-link"><div><h3>Camefite fruticose (Ch frut)</h3><p>Piccoli cespugli legnosi ramificati fin dalla base.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="Ch-pulvinate.html" class="card-link"><div><h3>Camefite pulvinate (Ch pulv)</h3><p>Piante con accrescimento denso a forma di cuscinetto.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="Ch-reptanti.html" class="card-link"><div><h3>Camefite reptanti (Ch rept)</h3><p>Sottorbuscelli caratterizzati da fusti striscianti.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="Ch-succulenti.html" class="card-link"><div><h3>Camefite succulenti (Ch succ)</h3><p>Piante basse con fusti o foglie carnose.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="Ch-suffruticose.html" class="card-link"><div><h3>Camefite suffruticose (Ch suffr)</h3><p>Fusti legnosi in basso e rami superiori erbacei annuali.</p></div><span class="action-text">Consulta Specie ➔</span></a>
+            <a href="Ch-sarmentose.html" class="card-link"><div><h3>Camefite sarmentose (Ch sarment)</h3><p>Cespugli bassi con rami allungati e flessibili.</p></div><span class="action-text">Consulta Specie ➔</span></a>
         </div>
+    </div>
+
+    <!-- 4. EMICRITTOFITE -->
+    <div class="macro-area">
+        <div class="macro-banner bg-h" onclick="toggleSection(this)">
+            <div class="macro-text"><h2>Emicrittofite (H)</h2><p>Piante perenni erbacee con gemme svernanti al livello del suolo, protette dalla lettiera o dalla neve.</p></div>
+            <div class="toggle-icon">▼</div>
+        </div>
+        <div class="grid-buttons"><p style="color:#64748b; font-style:italic;">Categoria in corso di popolamento...</p></div>
+    </div>
+
+    <!-- 5. TEROFITE -->
+    <div class="macro-area">
+        <div class="macro-banner bg-t" onclick="toggleSection(this)">
+            <div class="macro-text"><h2>Terofite (T)</h2><p>Piante annuali che superano la stagione avversa esclusivamente sotto forma di seme.</p></div>
+            <div class="toggle-icon">▼</div>
+        </div>
+        <div class="grid-buttons"><p style="color:#64748b; font-style:italic;">Categoria in corso di popolamento...</p></div>
+    </div>
+
+    <!-- 6. IDROFITE -->
+    <div class="macro-area">
+        <div class="macro-banner bg-i" onclick="toggleSection(this)">
+            <div class="macro-text"><h2>Idrofite (I)</h2><p>Piante acquatiche perenni con gemme sommerse o fluttuanti.</p></div>
+            <div class="toggle-icon">▼</div>
+        </div>
+        <div class="grid-buttons"><p style="color:#64748b; font-style:italic;">Categoria in corso di popolamento...</p></div>
+    </div>
+
+    <!-- 7. ELOFITE -->
+    <div class="macro-area">
+        <div class="macro-banner bg-he" onclick="toggleSection(this)">
+            <div class="macro-text"><h2>Elofite (He)</h2><p>Piante d'ambiente paludoso con base sommersa e fusto/foglie aeree.</p></div>
+            <div class="toggle-icon">▼</div>
+        </div>
+        <div class="grid-buttons"><p style="color:#64748b; font-style:italic;">Categoria in corso di popolamento...</p></div>
     </div>
 
 </div>
 
 <script>
     function toggleSection(bannerElement) {
-        // Recupera il blocco .macro-area che contiene questo banner
         const areaBlock = bannerElement.parentElement;
-        
-        // Alterna la classe .active per mostrare/nascondere la griglia interna
         areaBlock.classList.toggle('active');
     }
 </script>
