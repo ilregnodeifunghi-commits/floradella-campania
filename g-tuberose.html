@@ -15,27 +15,37 @@
         .flora-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .flora-table th { background: #f1f5f9; text-align: left; padding: 14px; font-weight: 700; color: #475569; border-bottom: 2px solid #cbd5e1; }
         .flora-table td { padding: 14px; border-bottom: 1px solid #e2e8f0; }
+        .flora-table tr:hover { background: #f8fafc; }
         .plant-link { color: #166534; font-weight: 700; font-style: italic; text-decoration: none; display: inline-block; }
         .plant-link:hover { color: #15803d; text-decoration: underline; }
+        .ita-name { color: #334155; font-weight: 500; }
+        .view-link { color: #64748b; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+        .view-link:hover { color: #166534; text-decoration: underline; }
     </style>
 </head>
 <body>
 <div class="container">
     <a href="index.html" class="btn-back">➔ Torna alla Dashboard</a>
     <h1>Geofite Tuberose (G tub)</h1>
-    <p class="descr">Mostra esclusivamente la nomenclatura scientifica attuale.</p>
+    <p class="descr">Piante erbacee perenni con fusti sotterranei trasformati in tuberi come organi di riserva.</p>
     <table class="flora-table">
         <thead>
             <tr>
                 <th>NOME SCIENTIFICO ATTUALE</th>
+                <th>NOME ITALIANO</th>
+                <th>SCHEDA TECNICA</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td><a href="schede/cyclamen-hederifolium.html" class="plant-link">Cyclamen hederifolium Aiton</a></td>
+                <td class="ita-name">Ciclamino napoletano</td>
+                <td><a href="schede/cyclamen-hederifolium.html" class="view-link">Visualizza Scheda ➔</a></td>
             </tr>
             <tr>
                 <td><a href="schede/anemone-hortensis.html" class="plant-link">Anemone hortensis L.</a></td>
+                <td class="ita-name">Anemone fiorito</td>
+                <td><a href="schede/anemone-hortensis.html" class="view-link">Visualizza Scheda ➔</a></td>
             </tr>
         </tbody>
     </table>
