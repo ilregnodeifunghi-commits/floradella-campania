@@ -6,70 +6,75 @@
     <title>Flora della Campania - Dashboard Home</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; color: #1e293b; padding: 40px 20px; line-height: 1.6; }
+        body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; background: #f1f5f9; color: #1e293b; padding: 40px 20px; line-height: 1.6; }
         .container { max-width: 1400px; margin: 0 auto; }
         
         .header-box {
-            background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
-            color: white; padding: 40px 30px; border-radius: 20px; text-align: center;
-            box-shadow: 0 15px 30px rgba(27, 67, 50, 0.15); margin-bottom: 40px; border: 3px solid #b7e4c7;
+            background: linear-gradient(135deg, #112a1d 0%, #1f4e37 100%);
+            color: white; padding: 45px 30px; border-radius: 24px; text-align: center;
+            box-shadow: 0 20px 40px rgba(17, 42, 29, 0.12); margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.1);
         }
-        .header-box h1 { font-size: 2.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; text-transform: uppercase; }
-        .header-box p { font-size: 1.2rem; font-style: italic; opacity: 0.95; max-width: 800px; margin: 0 auto; }
+        .header-box h1 { font-size: 3rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; text-transform: uppercase; }
+        .header-box p { font-size: 1.25rem; font-style: italic; opacity: 0.9; max-width: 800px; margin: 0 auto; font-weight: 300; }
 
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            gap: 25px;
         }
 
-        .macro-area { background: white; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.04); overflow: hidden; border: 1px solid #e2e8f0; height: max-content; }
+        .macro-area { background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); overflow: hidden; border: 1px solid #e2e8f0; height: max-content; transition: all 0.3s ease; }
+        .macro-area:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.06); }
         
-        .macro-banner { height: 180px; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; cursor: pointer; transition: transform 0.2s; }
-        .macro-banner:hover { transform: scale(1.01); }
+        /* BANNER VIVI GENERATI DA CODICE SENZA LINK ESTERNI */
+        .macro-banner { height: 160px; position: relative; display: flex; align-items: center; justify-content: space-between; padding: 20px; cursor: pointer; }
         
-        /* Filtro scuro leggero ma calibrato per far risaltare il testo bianco */
-        .macro-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.35); z-index: 1; }
+        .macro-text { position: relative; z-index: 2; color: white; width: 100%; }
+        .macro-text h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid rgba(255,255,255,0.25); padding-bottom: 6px; }
+        .macro-text p { font-size: 0.88rem; opacity: 0.95; font-style: italic; line-height: 1.4; font-weight: 400; }
         
-        .macro-text { position: relative; z-index: 2; color: white; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.9), 0px 0px 8px rgba(0, 0, 0, 0.7); }
-        .macro-text h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.4); padding-bottom: 4px; }
-        .macro-text p { font-size: 0.85rem; opacity: 1; font-weight: 600; font-style: italic; line-height: 1.3; }
-        
-        .toggle-icon { position: relative; z-index: 2; color: white; font-size: 1.2rem; transition: transform 0.3s; margin-left: 5px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+        .toggle-icon { position: relative; z-index: 2; color: white; font-size: 1.1rem; transition: transform 0.3s; margin-left: 10px; opacity: 0.8; }
         .macro-area.active .toggle-icon { transform: rotate(180deg); }
 
-        .grid-buttons { display: none; grid-template-columns: 1fr; gap: 10px; padding: 15px; background: #ffffff; border-top: 1px solid #e2e8f0; }
+        .grid-buttons { display: none; grid-template-columns: 1fr; gap: 12px; padding: 18px; background: #ffffff; border-top: 1px solid #f1f5f9; }
         .macro-area.active .grid-buttons { display: grid; }
 
-        .empty-status { padding: 15px; color: #64748b; font-style: italic; font-size: 0.85rem; border-top: 1px solid #e2e8f0; display: none; }
+        .empty-status { padding: 18px; color: #64748b; font-style: italic; font-size: 0.9rem; border-top: 1px solid #f1f5f9; display: none; background: #f8fafc; text-align: center; }
         .macro-area.active .empty-status { display: block; }
 
-        .card-link { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s; }
-        .card-link h3 { font-size: 1rem; margin-bottom: 2px; }
-        .card-link p { font-size: 0.8rem; color: #64748b; margin-bottom: 6px; line-height: 1.3; }
+        .card-link { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s; }
+        .card-link:hover { background: #f1f5f9; transform: translateX(2px); }
+        .card-link h3 { font-size: 1.05rem; margin-bottom: 3px; font-weight: 600; }
+        .card-link p { font-size: 0.85rem; color: #64748b; margin-bottom: 8px; line-height: 1.3; }
         
-        .area-g .card-link { border-left: 4px solid #2d6a4f; } .area-g .card-link h3 { color: #1b4332; }
-        .area-p .card-link { border-left: 4px solid #0284c7; } .area-p .card-link h3 { color: #0369a1; }
-        .area-ch .card-link { border-left: 4px solid #d97706; } .area-ch .card-link h3 { color: #b45309; }
-        .action-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
-        .area-g .action-text { color: #2d6a4f; } .area-p .action-text { color: #0284c7; } .area-ch .action-text { color: #d97706; }
+        .action-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .area-indexes .card-link { border-left: 4px solid #475569; }
-        .area-indexes .card-link h3 { color: #1e293b; }
-        .area-indexes .action-text { color: #475569; }
+        /* BORDI DELLE SCHEDE INTERNE COERENTI COI GRADIENTI */
+        .area-g .card-link { border-left: 4px solid #15803d; } .area-g .card-link h3, .area-g .action-text { color: #15803d; }
+        .area-p .card-link { border-left: 4px solid #0369a1; } .area-p .card-link h3, .area-p .action-text { color: #0369a1; }
+        .area-ch .card-link { border-left: 4px solid #b45309; } .area-ch .card-link h3, .area-ch .action-text { color: #b45309; }
+        .area-indexes .card-link { border-left: 4px solid #475569; } .area-indexes .card-link h3, .area-indexes .action-text { color: #475569; }
 
-        /* NUOVI LINK STABILI DA WIKIMEDIA COMMONS */
-        .bg-g { background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Galanthus_nivalis_Galanth_02.JPG/640px-Galanthus_nivalis_Galanth_02.JPG'); }
-        .bg-p { background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Fagus_sylvatica_forest_at_the_plateau_of_the_Sveinsheii_mountain_01.jpg/640px-Fagus_sylvatica_forest_at_the_plateau_of_the_Sveinsheii_mountain_01.jpg'); }
-        .bg-ch { background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Rosmarinus_officinalis_0002.jpg/640px-Rosmarinus_officinalis_0002.jpg'); }
-        .bg-h { background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Lw-Taraxacum_officinale_%28Common_Dandelion%29_m_flower_and_leaves_vertical.jpg/640px-Lw-Taraxacum_officinale_%28Common_Dandelion%29_m_flower_and_leaves_vertical.jpg'); }
-        .bg-t { background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Klatschmohn_vorn_nah.jpg/640px-Klatschmohn_vorn_nah.jpg'); }
-        .bg-i { background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Nymphaea_alba_080709w.jpg/640px-Nymphaea_alba_080709w.jpg'); }
-        .bg-he { background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Typha_latifolia_01_by_Daniel_Fuchs.jpg/640px-Typha_latifolia_01_by_Daniel_Fuchs.jpg'); }
-        .bg-indexes { background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Kops_Flora_Batava_Volume_1_-_Plate_50.jpg/640px-Kops_Flora_Batava_Volume_1_-_Plate_50.jpg'); }
+        /* GRADIENTI CROMATICI BOTANICI - SICURI AL 100% ED ELEGANTI */
+        /* GEOFITE: Verde Smeraldo / Natura profonda */
+        .bg-g { background: linear-gradient(135deg, #14532d 0%, #166534 100%); }
+        /* FANEROFITE: Blu Oceanico / Alti Alberi verso il cielo */
+        .bg-p { background: linear-gradient(135deg, #0c4a6e 0%, #075985 100%); }
+        /* CAMEFITE: Terra / Ocra / Arbusti mediterranei */
+        .bg-ch { background: linear-gradient(135deg, #7c2d12 0%, #9a3412 100%); }
+        /* EMICRITTOFITE: Prato Oliva vivace */
+        .bg-h { background: linear-gradient(135deg, #3f6212 0%, #4d7c0f 100%); }
+        /* TEROFITE: Arancio Autunnale / Campi e semi */
+        .bg-t { background: linear-gradient(135deg, #9a3412 0%, #b45309 100%); }
+        /* IDROFITE: Petrolio / Acque profonde */
+        .bg-i { background: linear-gradient(135deg, #115e59 0%, #134e4a 100%); }
+        /* ELOFITE: Palustre / Fango e Canne */
+        .bg-he { background: linear-gradient(135deg, #5c4033 0%, #2e1f13 100%); }
+        /* INDICI: Grigio Slate d'archivio / Erbario storico */
+        .bg-indexes { background: linear-gradient(135deg, #334155 0%, #475569 100%); }
 
         @media (max-width: 1200px) { .dashboard-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 650px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; gap: 20px; } .header-box h1 { font-size: 2.2rem; } }
     </style>
 </head>
 <body>
